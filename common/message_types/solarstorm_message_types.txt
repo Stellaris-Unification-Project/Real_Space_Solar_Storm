@@ -1,0 +1,81 @@
+message_type = {
+	key = "SHIFT_STORM_OCCURRED"
+	icon = "GFX_message_shift_storm"
+	icon_frame = 1
+
+	name = "MESSAGE_SHIFT_STORM_OCCURRED_TITLE"
+	sound = "notification"
+	ping = "ping_notification_yellow"
+}
+
+message_type = {
+	key = "RIFT_STORM_OPEN"
+	icon = "GFX_message_rift_open"
+	icon_frame = 1
+
+	name = "MESSAGE_RIFT_STORM_OPEN_TITLE"
+	sound = "notification"
+	ping = "ping_notification_yellow"
+}
+
+message_type = {
+	key = "RIFT_STORM_CLOSE"
+	icon = "GFX_message_rift_close"
+	icon_frame = 1
+
+	name = "MESSAGE_RIFT_STORM_CLOSE_TITLE"
+	sound = "notification"
+	ping = "ping_notification_yellow"
+}
+
+message_type = {
+	key = "BRIGE_STORM_OPEN"
+	icon = "GFX_message_brige_open"
+	icon_frame = 1
+
+	name = "MESSAGE_BRIGE_STORM_OPEN_TITLE"
+	sound = "notification"
+	ping = "ping_notification_yellow"
+}
+
+message_type = {
+	key = "BRIGE_STORM_CLOSE"
+	icon = "GFX_message_brige_close"
+	icon_frame = 1
+
+	name = "MESSAGE_BRIGE_STORM_CLOSE_TITLE"
+	sound = "notification"
+	ping = "ping_notification_yellow"
+}
+
+message_type = {
+	key = "NEW_WORMHOLE_FORMED"
+	icon = "GFX_message_wormhole_formed"
+	icon_frame = 1
+
+	name = "MESSAGE_NEW_WORMHOLE_FORMED_TITLE"
+	sound = "notification"
+	ping = "ping_notification_yellow"
+}
+
+message_type = {
+	key = "STELLAR_MILLSTONES"
+	icon = "GFX_message_stellar_millstones"
+	icon_frame = 1
+
+	name = "MESSAGE_STELLAR_MILLSTONES_TITLE"
+	sound = "notification"
+	ping = "ping_notification_yellow"
+}
+
+message_type = {
+	key = "SOLAR_STORM"
+	icon = "GFX_message_solar_storm"
+	icon_frame = 1
+
+	name = "MESSAGE_SOLAR_STORM_TITLE"
+	sound = "notification"
+	ping = "ping_notification_yellow"
+}
+
+

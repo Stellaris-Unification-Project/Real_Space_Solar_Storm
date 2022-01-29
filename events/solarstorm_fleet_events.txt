@@ -1,0 +1,4316 @@
+namespace = solarstorm_fleet_event
+
+# Gatekeeper - Stellar Millstones and Solar Storm
+fleet_event = {
+	id = solarstorm_fleet_event.1
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		NOT = { has_global_flag = solar_storm_disabled }
+		FROM = {
+			OR = {
+				is_star_class = sc_tt_red
+				is_star_class = sc_tt_orange
+				is_star_class = sc_tt_white
+				is_star_class = sc_ae
+				is_star_class = sc_protostar
+				is_star_class = sc_fu
+				is_star_class = sc_w_azure
+				is_star_class = sc_w_red
+				is_star_class = sc_w_green
+				is_star_class = sc_w_purple
+				is_star_class = sc_nova_1
+				is_star_class = sc_nova_2
+				is_star_class = sc_collapsar
+				is_star_class = sc_lbv_blue
+				is_star_class = sc_lbv_green
+				is_star_class = sc_lbv_red
+				is_star_class = sc_microquasar_1
+				is_star_class = sc_microquasar_2
+			}
+		}
+		owner = { is_country_type = default }
+	}
+	
+	immediate = {
+	
+		from = { save_event_target_as = dangerous_system }
+		
+		# Stellar Millstones
+		if = {
+			limit = {
+				FROM = {
+					OR = {
+						is_star_class = sc_tt_red
+						is_star_class = sc_tt_orange
+						is_star_class = sc_tt_white
+						is_star_class = sc_ae
+						is_star_class = sc_protostar
+						is_star_class = sc_fu
+					}
+				}
+			}
+			random_list = {
+				15 = {
+					modifier = {
+						factor = 2
+						from = { is_star_class = sc_protostar }
+					}
+					modifier = {
+						factor = 0.2
+						from = { 
+							exists = space_owner
+							space_owner = { is_same_value = prev.owner }
+							exists = starbase
+							starbase = { has_starbase_building = beacon_service_station }
+						}
+					}
+					modifier = {
+						factor = 0.8
+						owner = { has_technology = tech_sensors_2 }
+					}
+					modifier = {
+						factor = 0.6
+						owner = { has_technology = tech_sensors_2 }
+					}
+					modifier = {
+						factor = 0.5
+						owner = { is_ai = yes }
+					}
+					modifier = {
+						factor = 0.4
+						owner = { has_technology = tech_sensors_4 }
+					}
+					
+					if = {
+						limit = {
+							any_owned_ship = {
+								is_ship_class = shipclass_science_ship
+								is_ship_class = shipclass_constructor
+								is_ship_class = shipclass_colonizer
+							}
+						}
+						random_owned_ship = {
+							limit = {
+								OR = {
+									is_ship_class = shipclass_science_ship
+									is_ship_class = shipclass_constructor
+									is_ship_class = shipclass_colonizer
+								}
+							}
+							save_event_target_as = ship_threatened
+							ship_event = { id = solarstorm_fleet_event.2 days = 5 random = 10 }
+						}
+					}
+					else = {
+						save_event_target_as = fleet_threatened
+						fleet_event = { id = solarstorm_fleet_event.3 days = 5 random = 10 }
+					}
+				}
+				75 = {
+					#Null
+				}
+			}
+		}
+		# Solar Storm
+		if = {
+			limit = {
+				FROM = {
+					OR = {
+						is_star_class = sc_w_azure
+						is_star_class = sc_w_red
+						is_star_class = sc_w_green
+						is_star_class = sc_w_purple
+						is_star_class = sc_nova_1
+						is_star_class = sc_nova_2
+						is_star_class = sc_collapsar
+						is_star_class = sc_lbv_blue
+						is_star_class = sc_lbv_green
+						is_star_class = sc_lbv_red
+						is_star_class = sc_microquasar_1
+						is_star_class = sc_microquasar_2
+					}
+				}
+			}
+			
+			random_list = {
+				15 = {
+					modifier = {
+						factor = 2
+						from = { is_star_class = sc_collapsar }
+					}
+					modifier = {
+						factor = 0.2
+						from = { 
+							exists = space_owner
+							space_owner = { is_same_value = prev.owner }
+							exists = starbase
+							starbase = { has_starbase_building = solar_disturbance_recorder }
+						}
+					}
+					modifier = {
+						factor = 0.8
+						owner = { has_technology = tech_sensors_2 }
+					}
+					modifier = {
+						factor = 0.6
+						owner = { has_technology = tech_sensors_2 }
+					}
+					modifier = {
+						factor = 0.5
+						owner = { is_ai = yes }
+					}
+					modifier = {
+						factor = 0.4
+						owner = { has_technology = tech_sensors_4 }
+					}
+					
+					if = {
+						limit = {
+							any_owned_ship = {
+								is_ship_class = shipclass_science_ship
+								is_ship_class = shipclass_constructor
+								is_ship_class = shipclass_colonizer
+							}
+						}
+						random_owned_ship = {
+							limit = {
+								OR = {
+									is_ship_class = shipclass_science_ship
+									is_ship_class = shipclass_constructor
+									is_ship_class = shipclass_colonizer
+								}
+							}
+							save_event_target_as = ship_threatened
+							ship_event = { id = solarstorm_fleet_event.4 days = 5 random = 10 }
+						}
+					}
+					else = {
+						save_event_target_as = fleet_threatened
+						fleet_event = { id = solarstorm_fleet_event.5 days = 5 random = 10 }
+					}
+				}
+				75 = {
+					#Null
+				}
+			}
+		}
+	}
+}
+
+# Stellar Millstones - Civil Ships
+ship_event = {
+	id = solarstorm_fleet_event.2
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		exists = event_target:fleet_threatened
+		event_target:ship_threatened = {
+			solar_system = {
+				is_same_value = event_target:dangerous_system
+			}
+		}
+	}
+	
+	immediate = {
+			
+		#Science ship
+		if = {
+			limit = { is_ship_class = shipclass_science_ship }
+			random_list = {
+				70 = {
+					#Not damaged
+					modifier = {
+						factor = 1.5
+						AND = {
+							exists = leader
+							leader = {
+								leader_class = scientist
+								has_trait = leader_trait_roamer
+							}
+						}
+					}
+					modifier = {
+						factor = 1.5
+						AND = {
+							exists = leader
+							leader = { has_skill = 4 }
+						}
+					}
+					modifier = {
+						factor = 2
+						AND = {
+							exists = leader
+							leader = { has_skill >= 5 }
+						}
+					}
+					modifier = {
+						factor = 2
+						has_global_flag = solarstorm_easy_mod
+					}
+					
+					if = {
+						limit = { owner = { NOT = { has_country_flag = met_stellar_millstones } } }
+						owner = { country_event = { id = solarstorm_fleet_event.10 days = 1 } }
+					}
+					else = {
+						create_message = {
+							type = STELLAR_MILLSTONES
+							localization = STELLAR_MILLSTONES_SCIENSE_SHIP_1_DESC
+							days = 30
+							target = THIS
+							variable = {
+								type = name
+								localization = SHIP
+								scope = this
+							}
+							variable = {
+								type = name
+								localization = SYSTEM
+								scope = event_target:dangerous_system
+							}
+						}
+					
+						if = {
+							limit = { exists = leader }
+							locked_random_list = {
+								30 = {
+									modifier = {
+										factor = 0
+										leader = { has_trait = leader_trait_roamer }
+									}
+									leader = { add_trait = leader_trait_roamer }
+								}
+								70 = {
+									#Null
+								}
+							}
+							leader = { add_experience = 200 }
+						}
+					}
+				}
+				15 = {
+					#Damaged
+					modifier = {
+						factor = 1.5
+						has_global_flag = solarstorm_hard_mod
+					}
+					if = {
+						limit = { owner = { NOT = { has_country_flag = met_stellar_millstones } } }
+						owner = { country_event = { id = solarstorm_fleet_event.16 days = 1 } }
+					}
+					else = {
+						create_message = {
+							type = STELLAR_MILLSTONES
+							localization = STELLAR_MILLSTONES_SCIENSE_SHIP_2_DESC
+							days = 30
+							target = THIS
+							variable = {
+								type = name
+								localization = SHIP
+								scope = this
+							}
+							variable = {
+								type = name
+								localization = SYSTEM
+								scope = event_target:dangerous_system
+							}
+						}
+						
+						if = {
+							limit = { exists = leader }
+							locked_random_list = {
+								30 = {
+									modifier = {
+										factor = 0
+										leader = { has_trait = leader_trait_roamer }
+									}
+									leader = { add_trait = leader_trait_roamer }
+								}
+								70 = {
+									#Null
+								}
+							}
+							leader = { add_experience = 200 }
+						}
+						
+						reduce_hp_percent = 50
+					}
+				}
+				15 = {
+					#Destroyed
+					modifier = {
+						factor = 2
+						has_global_flag = solarstorm_hard_mod
+					}
+					if = {
+						limit = { exists = leader }
+						random_list = {
+							20 = {
+								#Scientist survived
+								leader = {unassign_leader = this}
+								if = {
+									limit = { owner = { NOT = { has_country_flag = met_stellar_millstones } } }
+									owner = { country_event = { id = solarstorm_fleet_event.11 days = 1 } }
+								}
+								else = {
+									create_message = {
+										type = STELLAR_MILLSTONES
+										localization = STELLAR_MILLSTONES_SCIENSE_SHIP_3_DESC
+										days = 30
+										target = event_target:dangerous_system
+										variable = {
+											type = name
+											localization = SHIP
+											scope = this
+										}
+										variable = {
+											type = name
+											localization = SYSTEM
+											scope = event_target:dangerous_system
+										}
+									}
+									
+									locked_random_list = {
+										30 = {
+											modifier = {
+												factor = 0
+												leader = { has_trait = leader_trait_roamer }
+											}
+											leader = { add_trait = leader_trait_roamer }
+										}
+										70 = {
+											#Null
+										}
+									}
+									leader = { add_experience = 200 }
+									
+									destroy_ship = this
+								}
+							}
+							80 = {
+								#Scientist died
+								if = {
+									limit = { owner = { NOT = { has_country_flag = met_stellar_millstones } } }
+									owner = { country_event = { id = solarstorm_fleet_event.17 days = 1 } }
+								}
+								else = {
+									create_message = {
+										type = STELLAR_MILLSTONES
+										localization = STELLAR_MILLSTONES_SCIENSE_SHIP_4_DESC
+										days = 30
+										target = event_target:dangerous_system
+										variable = {
+											type = name
+											localization = SHIP
+											scope = this
+										}
+										variable = {
+											type = name
+											localization = LEADER
+											scope = this.leader
+										}
+										variable = {
+											type = name
+											localization = SYSTEM
+											scope = event_target:dangerous_system
+										}
+									}
+									
+									destroy_ship = this
+								}
+							}
+						}
+					}
+				
+				}
+			}
+		}
+		
+		#Сonstructor ship
+		if = {
+			limit = { is_ship_class = shipclass_constructor }
+			random_list = {
+				50 = {
+					#Not damaged
+					modifier = {
+						factor = 2
+						has_global_flag = solarstorm_easy_mod
+					}
+					if = {
+						limit = { owner = { NOT = { has_country_flag = met_stellar_millstones } } }
+						owner = { country_event = { id = solarstorm_fleet_event.12 days = 1 } }
+					}
+					else = {
+						create_message = {
+							type = STELLAR_MILLSTONES
+							localization = STELLAR_MILLSTONES_CONSTRUCTOR_1_DESC
+							days = 30
+							target = THIS
+							variable = {
+								type = name
+								localization = SHIP
+								scope = this
+							}
+							variable = {
+								type = name
+								localization = SYSTEM
+								scope = event_target:dangerous_system
+							}
+						}
+					}
+				}
+				25 = {
+					#Damaged
+					modifier = {
+						factor = 1.5
+						has_global_flag = solarstorm_hard_mod
+					}
+					if = {
+						limit = { owner = { NOT = { has_country_flag = met_stellar_millstones } } }
+						owner = { country_event = { id = solarstorm_fleet_event.18 days = 1 } }
+					}
+					else = {
+						create_message = {
+							type = STELLAR_MILLSTONES
+							localization = STELLAR_MILLSTONES_CONSTRUCTOR_2_DESC
+							days = 30
+							target = THIS
+							variable = {
+								type = name
+								localization = SHIP
+								scope = this
+							}
+							variable = {
+								type = name
+								localization = SYSTEM
+								scope = event_target:dangerous_system
+							}
+						}
+						
+						reduce_hp_percent = 50
+					}
+				}
+				25 = {
+					#Destroyed
+					modifier = {
+						factor = 2
+						has_global_flag = solarstorm_hard_mod
+					}
+					if = {
+						limit = { owner = { NOT = { has_country_flag = met_stellar_millstones } } }
+						owner = { country_event = { id = solarstorm_fleet_event.13 days = 1 } }
+					}
+					else = {
+						create_message = {
+							type = STELLAR_MILLSTONES
+							localization = STELLAR_MILLSTONES_CONSTRUCTOR_3_DESC
+							days = 30
+							target = THIS
+							variable = {
+								type = name
+								localization = SHIP
+								scope = this
+							}
+							variable = {
+								type = name
+								localization = SYSTEM
+								scope = event_target:dangerous_system
+							}
+						}
+						
+						destroy_ship = this
+					}
+				}
+			}
+		}
+		
+		#Colonizer ship
+		if = {
+			limit = { is_ship_class = shipclass_colonizer }
+			random_list = {
+				30 = {
+					#Not damaged
+					modifier = {
+						factor = 2
+						has_global_flag = solarstorm_easy_mod
+					}
+					if = {
+						limit = { owner = { NOT = { has_country_flag = met_stellar_millstones } } }
+						owner = { country_event = { id = solarstorm_fleet_event.14 days = 1 } }
+					}
+					else = {
+						create_message = {
+							type = STELLAR_MILLSTONES
+							localization = STELLAR_MILLSTONES_COLONIZER_1_DESC
+							days = 30
+							target = THIS
+							variable = {
+								type = name
+								localization = SHIP
+								scope = this
+							}
+							variable = {
+								type = name
+								localization = SYSTEM
+								scope = event_target:dangerous_system
+							}
+						}
+					}
+				}
+				35 = {
+					#Damaged
+					modifier = {
+						factor = 1.5
+						has_global_flag = solarstorm_hard_mod
+					}
+					if = {
+						limit = { owner = { NOT = { has_country_flag = met_stellar_millstones } } }
+						owner = { country_event = { id = solarstorm_fleet_event.19 days = 1 } }
+					}
+					else = {
+						create_message = {
+							type = STELLAR_MILLSTONES
+							localization = STELLAR_MILLSTONES_COLONIZER_2_DESC
+							days = 30
+							target = THIS
+							variable = {
+								type = name
+								localization = SHIP
+								scope = this
+							}
+							variable = {
+								type = name
+								localization = SYSTEM
+								scope = event_target:dangerous_system
+							}
+						}
+						
+						reduce_hp_percent = 50
+					}
+				}
+				35 = {
+					#Destroyed
+					modifier = {
+						factor = 2
+						has_global_flag = solarstorm_hard_mod
+					}
+					if = {
+						limit = { owner = { NOT = { has_country_flag = met_stellar_millstones } } }
+						owner = { country_event = { id = solarstorm_fleet_event.15 days = 1 } }
+					}
+					else = {
+						create_message = {
+							type = STELLAR_MILLSTONES
+							localization = STELLAR_MILLSTONES_COLONIZER_3_DESC
+							days = 30
+							target = THIS
+							variable = {
+								type = name
+								localization = SHIP
+								scope = this
+							}
+							variable = {
+								type = name
+								localization = SYSTEM
+								scope = event_target:dangerous_system
+							}
+						}
+						
+						destroy_ship = this
+					}
+				}
+			}
+		}
+	}
+}
+
+# Stellar Millstones - Military Fleet
+fleet_event = {
+	id = solarstorm_fleet_event.3
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		exists = event_target:fleet_threatened
+		event_target:fleet_threatened = {
+			solar_system = {
+				is_same_value = event_target:dangerous_system
+			}
+		}
+	}
+	
+	immediate = {
+		set_variable = { which = num_damaged_ships value = 0 }
+		set_variable = { which = num_destroyed_ships value = 0 }
+		set_variable = { which = num_ships_in_fleet value = trigger:num_ships }
+		every_owned_ship = { 
+			random_list = {
+				20 = {
+					#Not damaged
+					modifier = {
+						factor = 3
+						is_small_ship = yes
+					}
+					modifier = {
+						factor = 2
+						has_global_flag = solarstorm_easy_mod
+					}
+				}
+				5 = {
+					#Damaged 10%
+					modifier = {
+						factor = 2
+						is_small_ship = yes
+					}
+					if = {
+						limit = { has_hp_percentage > 0.10 }
+						fleet = { change_variable = { which = num_damaged_ships value = 1 } }
+					}
+					else = {
+						fleet = { change_variable = { which = num_destroyed_ships value = 1 } }
+					}
+					reduce_hp_percent = 10
+				}
+				5 = {
+					#Damaged 20%
+					modifier = {
+						factor = 2
+						is_small_ship = yes
+					}
+					if = {
+						limit = { has_hp_percentage > 0.10 }
+						fleet = { change_variable = { which = num_damaged_ships value = 1 } }
+					}
+					else = {
+						fleet = { change_variable = { which = num_destroyed_ships value = 1 } }
+					}
+					reduce_hp_percent = 20
+				}
+				5 = {
+					#Damaged 30%
+					modifier = {
+						factor = 2
+						is_small_ship = yes
+					}
+					if = {
+						limit = { has_hp_percentage > 0.10 }
+						fleet = { change_variable = { which = num_damaged_ships value = 1 } }
+					}
+					else = {
+						fleet = { change_variable = { which = num_destroyed_ships value = 1 } }
+					}
+					reduce_hp_percent = 30
+				}
+				5 = {
+					#Damaged 40%
+					modifier = {
+						factor = 1.5
+						is_small_ship = yes
+					}
+					modifier = {
+						factor = 1.5
+						is_large_ship = yes
+					}
+					if = {
+						limit = { has_hp_percentage > 0.10 }
+						fleet = { change_variable = { which = num_damaged_ships value = 1 } }
+					}
+					else = {
+						fleet = { change_variable = { which = num_destroyed_ships value = 1 } }
+					}
+					reduce_hp_percent = 40
+				}
+				5 = {
+					modifier = {
+						factor = 1.5
+						is_small_ship = yes
+					}
+					modifier = {
+						factor = 1.5
+						is_large_ship = yes
+					}
+					#Damaged 50%
+					if = {
+						limit = { has_hp_percentage > 0.10 }
+						fleet = { change_variable = { which = num_damaged_ships value = 1 } }
+					}
+					else = {
+						fleet = { change_variable = { which = num_destroyed_ships value = 1 } }
+					}
+					reduce_hp_percent = 50
+				}
+				5 = {
+					#Damaged 60%
+					modifier = {
+						factor = 1.5
+						is_large_ship = yes
+					}
+					modifier = {
+						factor = 1.5
+						is_small_ship = yes
+					}
+					if = {
+						limit = { has_hp_percentage > 0.10 }
+						fleet = { change_variable = { which = num_damaged_ships value = 1 } }
+					}
+					else = {
+						fleet = { change_variable = { which = num_destroyed_ships value = 1 } }
+					}
+					reduce_hp_percent = 60
+				}
+				10 = {
+					#Damaged 70%
+					modifier = {
+						factor = 2
+						is_large_ship = yes
+					}
+					if = {
+						limit = { has_hp_percentage > 0.10 }
+						fleet = { change_variable = { which = num_damaged_ships value = 1 } }
+					}
+					else = {
+						fleet = { change_variable = { which = num_destroyed_ships value = 1 } }
+					}
+					reduce_hp_percent = 70
+				}
+				10 = {
+					#Damaged 80%
+					modifier = {
+						factor = 2
+						is_large_ship = yes
+					}
+					if = {
+						limit = { has_hp_percentage > 0.10 }
+						fleet = { change_variable = { which = num_damaged_ships value = 1 } }
+					}
+					else = {
+						fleet = { change_variable = { which = num_destroyed_ships value = 1 } }
+					}
+					reduce_hp_percent = 80
+				}
+				10 = {
+					#Damaged 90%
+					modifier = {
+						factor = 2
+						is_large_ship = yes
+					}
+					if = {
+						limit = { has_hp_percentage > 0.10 }
+						fleet = { change_variable = { which = num_damaged_ships value = 1 } }
+					}
+					else = {
+						fleet = { change_variable = { which = num_destroyed_ships value = 1 } }
+					}
+					reduce_hp_percent = 90
+				}
+				20 = {
+					#Destroyed
+					modifier = {
+						factor = 3
+						is_large_ship = yes
+					}
+					modifier = {
+						factor = 2
+						has_global_flag = solarstorm_hard_mod
+					}
+					fleet = { change_variable = { which = num_destroyed_ships value = 1 } }
+					destroy_ship = this
+				}
+			}
+		}
+		
+		if = {
+			limit = { owner = { has_country_flag = met_stellar_millstones } }
+			if = {
+				limit = { 
+					exists = leader
+					leader = { leader_class = admiral }
+					check_variable = { which = num_destroyed_ships value >= 1 }
+				}
+				random_list = {
+					80 = {
+						#Admiral survived
+						random_list = {
+							30 = {
+								modifier = {
+									factor = 0
+									leader = { has_trait = leader_trait_scout }
+								}
+								leader = { add_trait = leader_trait_scout }
+							}
+							70 = {
+								#Null
+							}
+						}
+						leader = { add_experience = 200 }
+					}
+					20 = {
+						modifier = {
+							factor = 2
+							check_variable = { which = num_destroyed_ships value > 10 }
+						}
+						modifier = {
+							factor = 2
+							check_variable = { which = num_destroyed_ships value = num_ships_in_fleet }
+						}
+						#Admiral died
+						leader = { kill_leader = { type = admiral show_notification = yes } }
+					}
+				}
+			}
+			
+			if = {
+				limit = { check_variable = { which = num_destroyed_ships value >= 5 } }
+				event_target:dangerous_system = {
+					if = {
+						limit = {
+							AND = {
+								exists = space_owner
+								NOT = { space_owner = {	is_same_value = prev } }
+							}
+						}
+						space_owner = {
+							if = {
+								limit = {
+									AND = {
+										is_country_type = default
+										is_homicidal = no
+										has_communications = event_target:fleet_threatened.owner
+									}
+								}
+								country_event = { id = solarstorm_fleet_event.24 days = 1 }
+							}
+							if = {
+								limit = {
+									AND = {
+										is_country_type = default
+										is_homicidal = no
+										NOT = { has_communications = event_target:fleet_threatened.owner }
+									}
+								}
+								country_event = { id = solarstorm_fleet_event.25 days = 1 }
+								
+								create_ambient_object = {
+									type = "small_debris_object"
+									location = event_target:fleet_threatened
+								}
+								last_created_ambient_object = {
+									save_global_event_target_as = fleet_wreckage
+								}
+							}
+							
+							event_target:fleet_threatened.owner = { save_global_event_target_as = wreckage_country }
+						}
+					}
+				}
+			}
+			
+			create_message = {
+				type = STELLAR_MILLSTONES
+				localization = STELLAR_MILLSTONES_FLEET_DESC
+				days = 30
+				target = THIS
+				variable = {
+					type = name
+					localization = FLEET
+					scope = this
+				}
+				variable = {
+					type = name
+					localization = SYSTEM
+					scope = event_target:dangerous_system
+				}
+				variable = {
+					type = variable
+					varname = num_damaged_ships
+					localization = NUM_DAMAGED_SHIPS
+					scope = this
+				}
+				variable = {
+					type = variable
+					varname = num_destroyed_ships
+					localization = NUM_DESTROYED_SHIPS
+					scope = this
+				}
+			}
+		}
+		else_if = {
+			limit = { 
+				check_variable = { which = num_destroyed_ships value = 0 }
+				owner = { NOT = { has_country_flag = met_stellar_millstones } }
+			}
+			owner = { country_event = { id = solarstorm_fleet_event.20 days = 1 } }
+		}
+		else_if = {
+			limit = { 
+				check_variable = { which = num_destroyed_ships value >= 1 }
+				check_variable = { which = num_destroyed_ships value <= 5 }
+				check_variable = { which = num_destroyed_ships value < num_ships_in_fleet }
+				owner = { NOT = { has_country_flag = met_stellar_millstones } }
+			}
+			if = {
+				limit = { 
+					exists = leader
+					leader = { leader_class = admiral }
+				}
+				random_list = {
+					80 = {
+						#Admiral survived
+						owner = { country_event = { id = solarstorm_fleet_event.21 days = 1 } }
+					}
+					20 = {
+						#Admiral died
+						modifier = {
+							factor = 2
+							check_variable = { which = num_destroyed_ships value > 2 }
+						}
+						leader = { kill_leader = { type = admiral show_notification = yes } }
+						owner = { country_event = { id = solarstorm_fleet_event.27 days = 1 } }
+					}
+				}
+			}
+			else = {
+				owner = { country_event = { id = solarstorm_fleet_event.21 days = 1 } }
+			}
+		}
+		else_if = {
+			limit = { 
+				check_variable = { which = num_destroyed_ships value > 5 }
+				check_variable = { which = num_destroyed_ships value < num_ships_in_fleet }
+				owner = { NOT = { has_country_flag = met_stellar_millstones } }
+			}
+			if = {
+				limit = { 
+					exists = leader
+					leader = { leader_class = admiral }
+				}
+				random_list = {
+					60 = {
+						#Admiral survived
+						owner = { country_event = { id = solarstorm_fleet_event.22 days = 1 } }
+					}
+					40 = {
+						#Admiral died
+						modifier = {
+							factor = 2
+							check_variable = { which = num_destroyed_ships value > 10 }
+						}
+						leader = { kill_leader = { type = admiral show_notification = yes } }
+						owner = { country_event = { id = solarstorm_fleet_event.28 days = 1 } }
+					}
+				}
+			}
+			else = {
+				owner = { country_event = { id = solarstorm_fleet_event.22 days = 1 } }
+			}
+		}
+		else_if = {
+			limit = { 
+				check_variable = { which = num_destroyed_ships value = num_ships_in_fleet }
+				owner = { NOT = { has_country_flag = met_stellar_millstones } }
+			}
+			if = {
+				limit = { 
+					exists = leader
+					leader = { leader_class = admiral }
+				}
+				random_list = {
+					20 = {
+						#Admiral survived
+						owner = { country_event = { id = solarstorm_fleet_event.23 days = 1 } }
+					}
+					80 = {
+						#Admiral died
+						leader = { kill_leader = { type = admiral show_notification = yes } }
+						owner = { country_event = { id = solarstorm_fleet_event.29 days = 1 } }
+					}
+				}
+			}
+			else = {
+				owner = { country_event = { id = solarstorm_fleet_event.23 days = 1 } }
+			}
+		}
+	}
+}
+
+# Solar Storm - Civil Ships
+ship_event = {
+	id = solarstorm_fleet_event.4
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		exists = event_target:fleet_threatened
+		event_target:ship_threatened = {
+			solar_system = {
+				is_same_value = event_target:dangerous_system
+			}
+		}
+	}
+	
+	immediate = {
+			
+		#Science ship
+		if = {
+			limit = { is_ship_class = shipclass_science_ship }
+			random_list = {
+				30 = {
+					#Not damaged
+					modifier = {
+						factor = 1.5
+						AND = {
+							exists = leader
+							leader = {
+								leader_class = scientist
+								has_trait = leader_trait_roamer
+							}
+						}
+					}
+					modifier = {
+						factor = 1.5
+						AND = {
+							exists = leader
+							leader = { has_skill = 4 }
+						}
+					}
+					modifier = {
+						factor = 2
+						AND = {
+							exists = leader
+							leader = { has_skill >= 5 }
+						}
+					}
+					modifier = {
+						factor = 2
+						has_global_flag = solarstorm_easy_mod
+					}
+					
+					if = {
+						limit = { owner = { NOT = { has_country_flag = met_solar_storm } } }
+						owner = { country_event = { id = solarstorm_fleet_event.30 days = 1 } }
+					}
+					else = {
+						create_message = {
+							type = SOLAR_STORM
+							localization = SOLAR_STORM_SCIENSE_SHIP_1_DESC
+							days = 30
+							target = THIS
+							variable = {
+								type = name
+								localization = SHIP
+								scope = this
+							}
+							variable = {
+								type = name
+								localization = SYSTEM
+								scope = event_target:dangerous_system
+							}
+						}
+					
+						if = {
+							limit = { exists = leader }
+							locked_random_list = {
+								30 = {
+									modifier = {
+										factor = 0
+										leader = { has_trait = leader_trait_roamer }
+									}
+									leader = { add_trait = leader_trait_roamer }
+								}
+								70 = {
+									#Null
+								}
+							}
+							leader = { add_experience = 200 }
+						}
+					}
+				}
+				35 = {
+					#Damaged
+					modifier = {
+						factor = 1.5
+						has_global_flag = solarstorm_hard_mod
+					}
+					if = {
+						limit = { owner = { NOT = { has_country_flag = met_solar_storm } } }
+						owner = { country_event = { id = solarstorm_fleet_event.36 days = 1 } }
+					}
+					else = {
+						create_message = {
+							type = SOLAR_STORM
+							localization = SOLAR_STORM_SCIENSE_SHIP_2_DESC
+							days = 30
+							target = THIS
+							variable = {
+								type = name
+								localization = SHIP
+								scope = this
+							}
+							variable = {
+								type = name
+								localization = SYSTEM
+								scope = event_target:dangerous_system
+							}
+						}
+						
+						if = {
+							limit = { exists = leader }
+							locked_random_list = {
+								30 = {
+									modifier = {
+										factor = 0
+										leader = { has_trait = leader_trait_roamer }
+									}
+									leader = { add_trait = leader_trait_roamer }
+								}
+								70 = {
+									#Null
+								}
+							}
+							leader = { add_experience = 200 }
+						}
+						
+						reduce_hp_percent = 50
+					}
+				}
+				35 = {
+					#Destroyed
+					modifier = {
+						factor = 2
+						has_global_flag = solarstorm_hard_mod
+					}
+					if = {
+						limit = { exists = leader }
+						random_list = {
+							20 = {
+								#Scientist survived
+								leader = {unassign_leader = this}
+								if = {
+									limit = { owner = { NOT = { has_country_flag = met_solar_storm } } }
+									owner = { country_event = { id = solarstorm_fleet_event.31 days = 1 } }
+								}
+								else = {
+									create_message = {
+										type = SOLAR_STORM
+										localization = SOLAR_STORM_SCIENSE_SHIP_3_DESC
+										days = 30
+										target = event_target:dangerous_system
+										variable = {
+											type = name
+											localization = SHIP
+											scope = this
+										}
+										variable = {
+											type = name
+											localization = SYSTEM
+											scope = event_target:dangerous_system
+										}
+									}
+									
+									locked_random_list = {
+										30 = {
+											modifier = {
+												factor = 0
+												leader = { has_trait = leader_trait_roamer }
+											}
+											leader = { add_trait = leader_trait_roamer }
+										}
+										70 = {
+											#Null
+										}
+									}
+									leader = { add_experience = 200 }
+									
+									destroy_ship = this
+								}
+							}
+							80 = {
+								#Scientist died
+								if = {
+									limit = { owner = { NOT = { has_country_flag = met_solar_storm } } }
+									owner = { country_event = { id = solarstorm_fleet_event.37 days = 1 } }
+								}
+								else = {
+									create_message = {
+										type = SOLAR_STORM
+										localization = SOLAR_STORM_SCIENSE_SHIP_4_DESC
+										days = 30
+										target = event_target:dangerous_system
+										variable = {
+											type = name
+											localization = SHIP
+											scope = this
+										}
+										variable = {
+											type = name
+											localization = LEADER
+											scope = this.leader
+										}
+										variable = {
+											type = name
+											localization = SYSTEM
+											scope = event_target:dangerous_system
+										}
+									}
+									
+									destroy_ship = this
+								}
+							}
+						}
+					}
+				
+				}
+			}
+		}
+		
+		#Сonstructor ship
+		if = {
+			limit = { is_ship_class = shipclass_constructor }
+			random_list = {
+				30 = {
+					#Not damaged
+					modifier = {
+						factor = 2
+						has_global_flag = solarstorm_easy_mod
+					}
+					if = {
+						limit = { owner = { NOT = { has_country_flag = met_solar_storm } } }
+						owner = { country_event = { id = solarstorm_fleet_event.32 days = 1 } }
+					}
+					else = {
+						create_message = {
+							type = SOLAR_STORM
+							localization = SOLAR_STORM_CONSTRUCTOR_1_DESC
+							days = 30
+							target = THIS
+							variable = {
+								type = name
+								localization = SHIP
+								scope = this
+							}
+							variable = {
+								type = name
+								localization = SYSTEM
+								scope = event_target:dangerous_system
+							}
+						}
+					}
+				}
+				35 = {
+					#Damaged
+					modifier = {
+						factor = 1.5
+						has_global_flag = solarstorm_hard_mod
+					}
+					if = {
+						limit = { owner = { NOT = { has_country_flag = met_solar_storm } } }
+						owner = { country_event = { id = solarstorm_fleet_event.38 days = 1 } }
+					}
+					else = {
+						create_message = {
+							type = SOLAR_STORM
+							localization = SOLAR_STORM_CONSTRUCTOR_2_DESC
+							days = 30
+							target = THIS
+							variable = {
+								type = name
+								localization = SHIP
+								scope = this
+							}
+							variable = {
+								type = name
+								localization = SYSTEM
+								scope = event_target:dangerous_system
+							}
+						}
+						
+						reduce_hp_percent = 50
+					}
+				}
+				35 = {
+					#Destroyed
+					modifier = {
+						factor = 2
+						has_global_flag = solarstorm_hard_mod
+					}
+					if = {
+						limit = { owner = { NOT = { has_country_flag = met_solar_storm } } }
+						owner = { country_event = { id = solarstorm_fleet_event.33 days = 1 } }
+					}
+					else = {
+						create_message = {
+							type = SOLAR_STORM
+							localization = SOLAR_STORM_CONSTRUCTOR_3_DESC
+							days = 30
+							target = THIS
+							variable = {
+								type = name
+								localization = SHIP
+								scope = this
+							}
+							variable = {
+								type = name
+								localization = SYSTEM
+								scope = event_target:dangerous_system
+							}
+						}
+						
+						destroy_ship = this
+					}
+				}
+			}
+		}
+		
+		#Colonizer ship
+		if = {
+			limit = { is_ship_class = shipclass_colonizer }
+			random_list = {
+				50 = {
+					#Not damaged
+					modifier = {
+						factor = 2
+						has_global_flag = solarstorm_easy_mod
+					}
+					if = {
+						limit = { owner = { NOT = { has_country_flag = met_solar_storm } } }
+						owner = { country_event = { id = solarstorm_fleet_event.34 days = 1 } }
+					}
+					else = {
+						create_message = {
+							type = SOLAR_STORM
+							localization = SOLAR_STORM_COLONIZER_1_DESC
+							days = 30
+							target = THIS
+							variable = {
+								type = name
+								localization = SHIP
+								scope = this
+							}
+							variable = {
+								type = name
+								localization = SYSTEM
+								scope = event_target:dangerous_system
+							}
+						}
+					}
+				}
+				25 = {
+					#Damaged
+					modifier = {
+						factor = 1.5
+						has_global_flag = solarstorm_hard_mod
+					}
+					if = {
+						limit = { owner = { NOT = { has_country_flag = met_solar_storm } } }
+						owner = { country_event = { id = solarstorm_fleet_event.39 days = 1 } }
+					}
+					else = {
+						create_message = {
+							type = SOLAR_STORM
+							localization = SOLAR_STORM_COLONIZER_2_DESC
+							days = 30
+							target = THIS
+							variable = {
+								type = name
+								localization = SHIP
+								scope = this
+							}
+							variable = {
+								type = name
+								localization = SYSTEM
+								scope = event_target:dangerous_system
+							}
+						}
+						
+						reduce_hp_percent = 50
+					}
+				}
+				25 = {
+					#Destroyed
+					modifier = {
+						factor = 2
+						has_global_flag = solarstorm_hard_mod
+					}
+					if = {
+						limit = { owner = { NOT = { has_country_flag = met_solar_storm } } }
+						owner = { country_event = { id = solarstorm_fleet_event.35 days = 1 } }
+					}
+					else = {
+						create_message = {
+							type = SOLAR_STORM
+							localization = SOLAR_STORM_COLONIZER_3_DESC
+							days = 30
+							target = THIS
+							variable = {
+								type = name
+								localization = SHIP
+								scope = this
+							}
+							variable = {
+								type = name
+								localization = SYSTEM
+								scope = event_target:dangerous_system
+							}
+						}
+						
+						destroy_ship = this
+					}
+				}
+			}
+		}
+	}
+}
+
+# Solar Storm - Military Fleet
+fleet_event = {
+	id = solarstorm_fleet_event.5
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		exists = event_target:fleet_threatened
+		event_target:fleet_threatened = {
+			solar_system = {
+				is_same_value = event_target:dangerous_system
+			}
+		}
+	}
+	
+	immediate = {
+		set_variable = { which = num_damaged_ships value = 0 }
+		set_variable = { which = num_destroyed_ships value = 0 }
+		set_variable = { which = num_ships_in_fleet value = trigger:num_ships }
+		every_owned_ship = { 
+			random_list = {
+				20 = {
+					#Not damaged
+					modifier = {
+						factor = 3
+						is_large_ship = yes
+					}
+					modifier = {
+						factor = 2
+						has_global_flag = solarstorm_easy_mod
+					}
+				}
+				5 = {
+					#Damaged 10%
+					modifier = {
+						factor = 2
+						is_large_ship = yes
+					}
+					if = {
+						limit = { has_hp_percentage > 0.10 }
+						fleet = { change_variable = { which = num_damaged_ships value = 1 } }
+					}
+					else = {
+						fleet = { change_variable = { which = num_destroyed_ships value = 1 } }
+					}
+					reduce_hp_percent = 10
+				}
+				5 = {
+					#Damaged 20%
+					modifier = {
+						factor = 2
+						is_large_ship = yes
+					}
+					if = {
+						limit = { has_hp_percentage > 0.10 }
+						fleet = { change_variable = { which = num_damaged_ships value = 1 } }
+					}
+					else = {
+						fleet = { change_variable = { which = num_destroyed_ships value = 1 } }
+					}
+					reduce_hp_percent = 20
+				}
+				5 = {
+					#Damaged 30%
+					modifier = {
+						factor = 2
+						is_large_ship = yes
+					}
+					if = {
+						limit = { has_hp_percentage > 0.10 }
+						fleet = { change_variable = { which = num_damaged_ships value = 1 } }
+					}
+					else = {
+						fleet = { change_variable = { which = num_destroyed_ships value = 1 } }
+					}
+					reduce_hp_percent = 30
+				}
+				5 = {
+					#Damaged 40%
+					modifier = {
+						factor = 1.5
+						is_small_ship = yes
+					}
+					modifier = {
+						factor = 1.5
+						is_large_ship = yes
+					}
+					if = {
+						limit = { has_hp_percentage > 0.10 }
+						fleet = { change_variable = { which = num_damaged_ships value = 1 } }
+					}
+					else = {
+						fleet = { change_variable = { which = num_destroyed_ships value = 1 } }
+					}
+					reduce_hp_percent = 40
+				}
+				5 = {
+					modifier = {
+						factor = 1.5
+						is_small_ship = yes
+					}
+					modifier = {
+						factor = 1.5
+						is_large_ship = yes
+					}
+					#Damaged 50%
+					if = {
+						limit = { has_hp_percentage > 0.10 }
+						fleet = { change_variable = { which = num_damaged_ships value = 1 } }
+					}
+					else = {
+						fleet = { change_variable = { which = num_destroyed_ships value = 1 } }
+					}
+					reduce_hp_percent = 50
+				}
+				5 = {
+					#Damaged 60%
+					modifier = {
+						factor = 1.5
+						is_small_ship = yes
+					}
+					modifier = {
+						factor = 1.5
+						is_large_ship = yes
+					}
+					if = {
+						limit = { has_hp_percentage > 0.10 }
+						fleet = { change_variable = { which = num_damaged_ships value = 1 } }
+					}
+					else = {
+						fleet = { change_variable = { which = num_destroyed_ships value = 1 } }
+					}
+					reduce_hp_percent = 60
+				}
+				10 = {
+					#Damaged 70%
+					modifier = {
+						factor = 2
+						is_small_ship = yes
+					}
+					if = {
+						limit = { has_hp_percentage > 0.10 }
+						fleet = { change_variable = { which = num_damaged_ships value = 1 } }
+					}
+					else = {
+						fleet = { change_variable = { which = num_destroyed_ships value = 1 } }
+					}
+					reduce_hp_percent = 70
+				}
+				10 = {
+					#Damaged 80%
+					modifier = {
+						factor = 2
+						is_small_ship = yes
+					}
+					if = {
+						limit = { has_hp_percentage > 0.10 }
+						fleet = { change_variable = { which = num_damaged_ships value = 1 } }
+					}
+					else = {
+						fleet = { change_variable = { which = num_destroyed_ships value = 1 } }
+					}
+					reduce_hp_percent = 80
+				}
+				10 = {
+					#Damaged 90%
+					modifier = {
+						factor = 2
+						is_small_ship = yes
+					}
+					if = {
+						limit = { has_hp_percentage > 0.10 }
+						fleet = { change_variable = { which = num_damaged_ships value = 1 } }
+					}
+					else = {
+						fleet = { change_variable = { which = num_destroyed_ships value = 1 } }
+					}
+					reduce_hp_percent = 90
+				}
+				20 = {
+					#Destroyed
+					modifier = {
+						factor = 3
+						is_small_ship = yes
+					}
+					modifier = {
+						factor = 2
+						has_global_flag = solarstorm_hard_mod
+					}
+					fleet = { change_variable = { which = num_destroyed_ships value = 1 } }
+					destroy_ship = this
+				}
+			}
+		}
+		
+		if = {
+			limit = { owner = { has_country_flag = met_solar_storm } }
+			if = {
+				limit = { 
+					exists = leader
+					leader = { leader_class = admiral }
+					check_variable = { which = num_destroyed_ships value >= 1 }
+				}
+				random_list = {
+					80 = {
+						#Admiral survived
+						random_list = {
+							30 = {
+								modifier = {
+									factor = 0
+									leader = { has_trait = leader_trait_scout }
+								}
+								leader = { add_trait = leader_trait_scout }
+							}
+							70 = {
+								#Null
+							}
+						}
+						leader = { add_experience = 200 }
+					}
+					20 = {
+						modifier = {
+							factor = 2
+							check_variable = { which = num_destroyed_ships value > 10 }
+						}
+						modifier = {
+							factor = 2
+							check_variable = { which = num_destroyed_ships value = num_ships_in_fleet }
+						}
+						#Admiral died
+						leader = { kill_leader = { type = admiral show_notification = yes } }
+					}
+				}
+			}
+			
+			if = {
+				limit = { check_variable = { which = num_destroyed_ships value >= 5 } }
+				event_target:dangerous_system = {
+					if = {
+						limit = {
+							AND = {
+								exists = space_owner
+								NOT = { space_owner = {	is_same_value = prev } }
+							}
+						}
+						space_owner = {
+							if = {
+								limit = {
+									AND = {
+										is_country_type = default
+										is_homicidal = no
+										has_communications = event_target:fleet_threatened.owner
+									}
+								}
+								country_event = { id = solarstorm_fleet_event.44 days = 1 }
+							}
+							if = {
+								limit = {
+									AND = {
+										is_country_type = default
+										is_homicidal = no
+										NOT = { has_communications = event_target:fleet_threatened.owner }
+									}
+								}
+								country_event = { id = solarstorm_fleet_event.45 days = 1 }
+								
+								create_ambient_object = {
+									type = "small_debris_object"
+									location = event_target:fleet_threatened
+								}
+								last_created_ambient_object = {
+									save_global_event_target_as = fleet_wreckage
+								}
+							}
+							
+							event_target:fleet_threatened.owner = { save_global_event_target_as = wreckage_country }
+						}
+					}
+				}
+			}
+			
+			create_message = {
+				type = SOLAR_STORM
+				localization = SOLAR_STORM_FLEET_DESC
+				days = 30
+				target = THIS
+				variable = {
+					type = name
+					localization = FLEET
+					scope = this
+				}
+				variable = {
+					type = name
+					localization = SYSTEM
+					scope = event_target:dangerous_system
+				}
+				variable = {
+					type = variable
+					varname = num_damaged_ships
+					localization = NUM_DAMAGED_SHIPS
+					scope = this
+				}
+				variable = {
+					type = variable
+					varname = num_destroyed_ships
+					localization = NUM_DESTROYED_SHIPS
+					scope = this
+				}
+			}
+		}
+		else_if = {
+			limit = { 
+				check_variable = { which = num_destroyed_ships value = 0 }
+				owner = { NOT = { has_country_flag = met_solar_storm } }
+			}
+			owner = { country_event = { id = solarstorm_fleet_event.40 days = 1 } }
+		}
+		else_if = {
+			limit = { 
+				check_variable = { which = num_destroyed_ships value >= 1 }
+				check_variable = { which = num_destroyed_ships value <= 5 }
+				check_variable = { which = num_destroyed_ships value < num_ships_in_fleet }
+				owner = { NOT = { has_country_flag = met_solar_storm } }
+			}
+			if = {
+				limit = { 
+					exists = leader
+					leader = { leader_class = admiral }
+				}
+				random_list = {
+					80 = {
+						#Admiral survived
+						owner = { country_event = { id = solarstorm_fleet_event.41 days = 1 } }
+					}
+					20 = {
+						#Admiral died
+						modifier = {
+							factor = 2
+							check_variable = { which = num_destroyed_ships value > 2 }
+						}
+						leader = { kill_leader = { type = admiral show_notification = yes } }
+						owner = { country_event = { id = solarstorm_fleet_event.47 days = 1 } }
+					}
+				}
+			}
+			else = {
+				owner = { country_event = { id = solarstorm_fleet_event.41 days = 1 } }
+			}
+		}
+		else_if = {
+			limit = { 
+				check_variable = { which = num_destroyed_ships value > 5 }
+				check_variable = { which = num_destroyed_ships value < num_ships_in_fleet }
+				owner = { NOT = { has_country_flag = met_solar_storm } }
+			}
+			if = {
+				limit = { 
+					exists = leader
+					leader = { leader_class = admiral }
+				}
+				random_list = {
+					60 = {
+						#Admiral survived
+						owner = { country_event = { id = solarstorm_fleet_event.42 days = 1 } }
+					}
+					40 = {
+						#Admiral died
+						modifier = {
+							factor = 2
+							check_variable = { which = num_destroyed_ships value > 10 }
+						}
+						leader = { kill_leader = { type = admiral show_notification = yes } }
+						owner = { country_event = { id = solarstorm_fleet_event.48 days = 1 } }
+					}
+				}
+			}
+			else = {
+				owner = { country_event = { id = solarstorm_fleet_event.42 days = 1 } }
+			}
+		}
+		else_if = {
+			limit = { 
+				check_variable = { which = num_destroyed_ships value = num_ships_in_fleet }
+				owner = { NOT = { has_country_flag = met_solar_storm } }
+			}
+			if = {
+				limit = { 
+					exists = leader
+					leader = { leader_class = admiral }
+				}
+				random_list = {
+					20 = {
+						#Admiral survived
+						owner = { country_event = { id = solarstorm_fleet_event.43 days = 1 } }
+					}
+					80 = {
+						#Admiral died
+						leader = { kill_leader = { type = admiral show_notification = yes } }
+						owner = { country_event = { id = solarstorm_fleet_event.49 days = 1 } }
+					}
+				}
+			}
+			else = {
+				owner = { country_event = { id = solarstorm_fleet_event.43 days = 1 } }
+			}
+		}
+	}
+}
+
+# Gatekeeper - Gamma-ray Burst
+event = {
+	id = solarstorm_fleet_event.7
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		NOT = { has_global_flag = solar_storm_disabled }
+	}
+	
+	immediate = {
+		
+		random_galaxy_planet = {
+			limit = {
+				OR = {
+					is_planet_class = pc_collapsar
+					is_planet_class = pc_nova_1
+					is_planet_class = pc_nova_2
+					is_planet_class = pc_magnetar
+				}
+			}
+			random_list = {
+				15 = {
+					modifier = {
+						factor = 2
+						is_planet_class = pc_magnetar
+					}
+					modifier = {
+						factor = 2
+						has_global_flag = solarstorm_hard_mod
+					}
+					modifier = {
+						factor = 1.5
+						is_planet_class = pc_collapsar
+					}
+					modifier = {
+						factor = 0.5
+						has_global_flag = solarstorm_easy_mod
+					}
+					modifier = {
+						factor = 0.2
+						solar_system = { 
+							exists = starbase
+							starbase = { has_starbase_building = gamma_stabilizer }
+						}
+					}
+					solar_system = { save_event_target_as = gamma_burst_system }
+					planet_event = { id = solarstorm_fleet_event.50 days = 30 random = 90 }
+				}
+				85 = {
+					#Not effect
+				}
+			}
+		}
+	}
+}
+
+
+# Stellar Millstones: Science ship survived
+country_event = {
+	id = solarstorm_fleet_event.10
+	title = "solarstorm_fleet_event.10.name"
+	desc = "solarstorm_fleet_event.10.desc"
+	picture = GFX_evt_stellar_millstones
+	show_sound = event_sensor_ping
+	location = event_target:ship_threatened
+	
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = { has_country_flag = met_stellar_millstones }
+	}
+	
+	immediate = {
+		set_country_flag = met_stellar_millstones
+	}
+
+	option = {
+		name = IS_A_DANGEROUS_PLACE
+		
+		event_target:ship_threatened = {
+			if = {
+				limit = { exists = leader }
+				locked_random_list = {
+					30 = {
+						modifier = {
+							factor = 0
+							leader = { has_trait = leader_trait_roamer }
+						}
+						leader = { add_trait = leader_trait_roamer }
+					}
+					70 = {
+						#Null
+					}
+				}
+				leader = { add_experience = 200 }
+			}
+		}
+	}
+}
+
+# Stellar Millstones: Science ship destroyed (Scientist survived)
+country_event = {
+	id = solarstorm_fleet_event.11
+	title = "solarstorm_fleet_event.11.name"
+	desc = "solarstorm_fleet_event.11.desc"
+	picture = GFX_evt_stellar_millstones
+	show_sound = event_air_raid_siren
+	location = event_target:ship_threatened
+	
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = { has_country_flag = met_stellar_millstones }
+	}
+	
+	immediate = {
+		set_country_flag = met_stellar_millstones
+	}
+
+	option = {
+		name = IS_A_DANGEROUS_PLACE
+		
+		event_target:ship_threatened = { 
+			if = {
+				limit = { exists = leader }
+				locked_random_list = {
+					30 = {
+						modifier = {
+							factor = 0
+							leader = { has_trait = leader_trait_roamer }
+						}
+						leader = { add_trait = leader_trait_roamer }
+					}
+					70 = {
+						#Null
+					}
+				}
+				leader = { add_experience = 200 }
+			}
+			destroy_ship = this
+		}
+	}
+}
+
+# Stellar Millstones: Сonstructor ship survived
+country_event = {
+	id = solarstorm_fleet_event.12
+	title = "solarstorm_fleet_event.12.name"
+	desc = "solarstorm_fleet_event.12.desc"
+	picture = GFX_evt_stellar_millstones
+	show_sound = event_sensor_ping
+	location = event_target:ship_threatened
+	
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = { has_country_flag = met_stellar_millstones }
+	}
+	
+	immediate = {
+		set_country_flag = met_stellar_millstones
+	}
+
+	option = {
+		name = IS_A_DANGEROUS_PLACE
+	}
+}
+
+# Stellar Millstones: Сonstructor ship destroyed
+country_event = {
+	id = solarstorm_fleet_event.13
+	title = "solarstorm_fleet_event.13.name"
+	desc = "solarstorm_fleet_event.13.desc"
+	picture = GFX_evt_stellar_millstones
+	show_sound = event_air_raid_siren
+	location = event_target:ship_threatened
+	
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = { has_country_flag = met_stellar_millstones }
+	}
+	
+	immediate = {
+		set_country_flag = met_stellar_millstones
+	}
+
+	option = {
+		name = IS_A_DANGEROUS_PLACE
+		
+		event_target:ship_threatened = { 
+			destroy_ship = this
+		}
+	}
+}
+
+# Stellar Millstones: Colonizer ship survived
+country_event = {
+	id = solarstorm_fleet_event.14
+	title = "solarstorm_fleet_event.14.name"
+	desc = "solarstorm_fleet_event.14.desc"
+	picture = GFX_evt_stellar_millstones
+	show_sound = event_sensor_ping
+	location = event_target:ship_threatened
+	
+	is_triggered_only = yes
+
+	trigger = {
+		exists = event_target:ship_threatened
+		event_target:ship_threatened = {
+			solar_system = {
+				is_same_value = event_target:dangerous_system
+			}
+		}
+	}
+	
+	immediate = {
+		set_country_flag = met_stellar_millstones
+	}
+
+	option = {
+		name = IS_A_DANGEROUS_PLACE
+	}
+}
+
+# Stellar Millstones: Colonizer ship destroyed
+country_event = {
+	id = solarstorm_fleet_event.15
+	title = "solarstorm_fleet_event.15.name"
+	desc = "solarstorm_fleet_event.15.desc"
+	picture = GFX_evt_stellar_millstones
+	show_sound = event_air_raid_siren
+	location = event_target:ship_threatened
+	
+	is_triggered_only = yes
+
+	trigger = {
+		exists = event_target:ship_threatened
+		event_target:ship_threatened = {
+			solar_system = {
+				is_same_value = event_target:dangerous_system
+			}
+		}
+	}
+	
+	immediate = {
+		set_country_flag = met_stellar_millstones
+	}
+
+	option = {
+		name = IS_A_DANGEROUS_PLACE
+		
+		event_target:ship_threatened = { 
+			destroy_ship = this
+		}
+	}
+}
+
+# Stellar Millstones: Science ship damaged
+country_event = {
+	id = solarstorm_fleet_event.16
+	title = "solarstorm_fleet_event.16.name"
+	desc = "solarstorm_fleet_event.16.desc"
+	picture = GFX_evt_stellar_millstones
+	show_sound = event_sensor_ping
+	location = event_target:ship_threatened
+	
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = { has_country_flag = met_stellar_millstones }
+	}
+	
+	immediate = {
+		set_country_flag = met_stellar_millstones
+	}
+
+	option = {
+		name = IS_A_DANGEROUS_PLACE
+		
+		event_target:ship_threatened = {
+			if = {
+				limit = { exists = leader }
+				locked_random_list = {
+					30 = {
+						modifier = {
+							factor = 0
+							leader = { has_trait = leader_trait_roamer }
+						}
+						leader = { add_trait = leader_trait_roamer }
+					}
+					70 = {
+						#Null
+					}
+				}
+				leader = { add_experience = 200 }
+			}
+			reduce_hp_percent = 50
+		}
+	}
+}
+
+# Stellar Millstones: Science ship destroyed (Scientist died)
+country_event = {
+	id = solarstorm_fleet_event.17
+	title = "solarstorm_fleet_event.17.name"
+	desc = "solarstorm_fleet_event.17.desc"
+	picture = GFX_evt_stellar_millstones
+	show_sound = event_air_raid_siren
+	location = event_target:ship_threatened
+	
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = { has_country_flag = met_stellar_millstones }
+	}
+	
+	immediate = {
+		set_country_flag = met_stellar_millstones
+	}
+
+	option = {
+		name = IS_A_DANGEROUS_PLACE
+		
+		event_target:ship_threatened = { 
+			destroy_ship = this
+		}
+	}
+}
+
+# Stellar Millstones: Сonstructor ship damaged
+country_event = {
+	id = solarstorm_fleet_event.18
+	title = "solarstorm_fleet_event.18.name"
+	desc = "solarstorm_fleet_event.18.desc"
+	picture = GFX_evt_stellar_millstones
+	show_sound = event_sensor_ping
+	location = event_target:ship_threatened
+	
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = { has_country_flag = met_stellar_millstones }
+	}
+	
+	immediate = {
+		set_country_flag = met_stellar_millstones
+	}
+
+	option = {
+		name = IS_A_DANGEROUS_PLACE
+		
+		event_target:ship_threatened = {
+			reduce_hp_percent = 50
+		}
+	}
+}
+
+# Stellar Millstones: Colonizer ship damaged
+country_event = {
+	id = solarstorm_fleet_event.19
+	title = "solarstorm_fleet_event.19.name"
+	desc = "solarstorm_fleet_event.19.desc"
+	picture = GFX_evt_stellar_millstones
+	show_sound = event_sensor_ping
+	location = event_target:ship_threatened
+	
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = { has_country_flag = met_stellar_millstones }
+	}
+	
+	immediate = {
+		set_country_flag = met_stellar_millstones
+	}
+
+	option = {
+		name = IS_A_DANGEROUS_PLACE
+		
+		event_target:ship_threatened = {
+			reduce_hp_percent = 50
+		}
+	}
+}
+
+
+
+# Stellar Millstones: All ships survived
+country_event = {
+	id = solarstorm_fleet_event.20
+	title = "solarstorm_fleet_event.20.name"
+	desc = "solarstorm_fleet_event.20.desc"
+	picture = GFX_evt_stellar_millstones
+	show_sound = event_sensor_ping
+	location = event_target:fleet_threatened
+	
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = { has_country_flag = met_stellar_millstones }
+	}
+	
+	immediate = {
+		set_country_flag = met_stellar_millstones
+	}
+
+	option = {
+		name = GOOD
+		
+		event_target:fleet_threatened = {
+			if = {
+				limit = { exists = leader }
+				locked_random_list = {
+					30 = {
+						modifier = {
+							factor = 0
+							leader = { has_trait = leader_trait_scout }
+						}
+						leader = { add_trait = leader_trait_scout }
+					}
+					70 = {
+						#Null
+					}
+				}
+				leader = { add_experience = 200 }
+			}
+		}
+		
+		custom_tooltip = damaged_ships_report
+	}
+}
+
+# Stellar Millstones: Several ships destroyed (no leader or admiral survived)
+country_event = {
+	id = solarstorm_fleet_event.21
+	title = "solarstorm_fleet_event.21.name"
+	desc = {
+		trigger = { 
+			event_target:fleet_threatened = {
+				exists = leader
+				leader = { leader_class = admiral }
+			}
+		}
+		text = "solarstorm_fleet_event.21.desc.admiral_survived"
+	}
+	desc = {
+		trigger = { 
+			event_target:fleet_threatened = {
+				NOR = {
+					exists = leader
+					leader = { leader_class = admiral }
+				}
+			}
+		}
+		text = "solarstorm_fleet_event.21.desc"
+	}
+	picture = GFX_evt_stellar_millstones
+	show_sound = event_air_raid_siren
+	location = event_target:fleet_threatened
+	
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = { has_country_flag = met_stellar_millstones }
+	}
+	
+	immediate = {
+		set_country_flag = met_stellar_millstones
+	}
+
+	option = {
+		name = IS_A_DANGEROUS_PLACE
+		
+		event_target:fleet_threatened = {
+			if = {
+				limit = { exists = leader }
+				locked_random_list = {
+					30 = {
+						modifier = {
+							factor = 0
+							leader = { has_trait = leader_trait_scout }
+						}
+						leader = { add_trait = leader_trait_scout }
+					}
+					70 = {
+						#Null
+					}
+				}
+				leader = { add_experience = 200 }
+			}
+		}
+		
+		custom_tooltip = damaged_and_destroyed_ships_report
+	}
+}
+
+# Stellar Millstones: Many ships destroyed (no leader or admiral survived)
+country_event = {
+	id = solarstorm_fleet_event.22
+	title = "solarstorm_fleet_event.22.name"
+	desc = {
+		trigger = { 
+			event_target:fleet_threatened = {
+				exists = leader
+				leader = { leader_class = admiral }
+			}
+		}
+		text = "solarstorm_fleet_event.22.desc.admiral_survived"
+	}
+	desc = {
+		trigger = { 
+			event_target:fleet_threatened = {
+				NOR = {
+					exists = leader
+					leader = { leader_class = admiral }
+				}
+			}
+		}
+		text = "solarstorm_fleet_event.22.desc"
+	}
+	picture = GFX_evt_stellar_millstones
+	show_sound = event_air_raid_siren
+	location = event_target:fleet_threatened
+	
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = { has_country_flag = met_stellar_millstones }
+	}
+	
+	immediate = {
+		set_country_flag = met_stellar_millstones
+		event_target:dangerous_system = {
+			if = {
+				limit = {
+					AND = {
+						exists = space_owner
+						NOT = { space_owner = {	is_same_value = prev } }
+					}
+				}
+				space_owner = {
+					if = {
+						limit = {
+							AND = {
+								is_country_type = default
+								is_homicidal = no
+								has_communications = prevprev
+							}
+						}
+						country_event = { id = solarstorm_fleet_event.24 days = 1 }
+					}
+					if = {
+						limit = {
+							AND = {
+								is_country_type = default
+								is_homicidal = no
+								NOT = { has_communications = prevprev }
+							}
+						}
+						country_event = { id = solarstorm_fleet_event.25 days = 1 }
+						
+						create_ambient_object = {
+							type = "small_debris_object"
+							location = event_target:fleet_threatened
+						}
+						last_created_ambient_object = {
+							save_global_event_target_as = fleet_wreckage
+						}
+					}
+					
+					prevprev = { save_global_event_target_as = wreckage_country }
+				}
+			}
+		}
+	}
+
+	option = {
+		name = IS_A_DANGEROUS_PLACE
+		
+		custom_tooltip = damaged_and_destroyed_ships_report
+	}
+}
+
+# Stellar Millstones: All ships destroyed (no leader or admiral survived)
+country_event = {
+	id = solarstorm_fleet_event.23
+	title = "solarstorm_fleet_event.23.name"
+	desc = {
+		trigger = { 
+			event_target:fleet_threatened = {
+				exists = leader
+				leader = { leader_class = admiral }
+			}
+		}
+		text = "solarstorm_fleet_event.23.desc.admiral_survived"
+	}
+	desc = {
+		trigger = { 
+			event_target:fleet_threatened = {
+				NOR = {
+					exists = leader
+					leader = { leader_class = admiral }
+				}
+			}
+		}
+		text = "solarstorm_fleet_event.23.desc"
+	}
+	picture = GFX_evt_stellar_millstones
+	show_sound = event_air_raid_siren
+	location = event_target:fleet_threatened
+	
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = { has_country_flag = met_stellar_millstones }
+	}
+	
+	immediate = {
+		set_country_flag = met_stellar_millstones
+		event_target:dangerous_system = {
+			if = {
+				limit = {
+					AND = {
+						exists = space_owner
+						NOT = { space_owner = {	is_same_value = prev } }
+					}
+				}
+				space_owner = {
+					if = {
+						limit = {
+							AND = {
+								is_country_type = default
+								is_homicidal = no
+								has_communications = prevprev
+							}
+						}
+						country_event = { id = solarstorm_fleet_event.25 days = 1 }
+						
+						create_ambient_object = {
+							type = "small_debris_object"
+							location = event_target:fleet_threatened
+						}
+						last_created_ambient_object = {
+							save_global_event_target_as = fleet_wreckage
+						}
+					}
+					if = {
+						limit = {
+							AND = {
+								is_country_type = default
+								is_homicidal = no
+								NOT = { has_communications = prevprev }
+							}
+						}
+						country_event = { id = solarstorm_fleet_event.26 days = 1 }
+						
+						create_ambient_object = {
+							type = "small_debris_object"
+							location = event_target:fleet_threatened
+						}
+						last_created_ambient_object = {
+							save_global_event_target_as = fleet_wreckage
+						}
+					}
+					
+					prevprev = { save_global_event_target_as = wreckage_country }
+				}
+			}
+		}
+	}
+
+	option = {
+		name = TERRIBLE
+		
+		custom_tooltip = fleet_lost
+	}
+}
+
+# Stellar Millstones: Owner Space Message ( No wreckage )
+country_event = {
+	id = solarstorm_fleet_event.24
+	title = "solarstorm_fleet_event.24.name"
+	desc = "solarstorm_fleet_event.24.desc"
+	picture = GFX_evt_stellar_millstones
+	show_sound = event_sensor_ping
+	location = from
+	
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = { is_same_value = event_target:wreckage_country }
+	}
+	
+	immediate = {
+	}
+
+	option = {
+		name = IS_A_DANGEROUS_PLACE
+		trigger = {
+			OR = {
+				NOT = { is_at_war_with = event_target:wreckage_country }
+				event_target:wreckage_country = { is_homicidal = no }
+			}
+		}
+		clear_global_event_target = wreckage_country
+	}
+	
+	option = {
+		name = EXCELLENT
+		trigger = {
+			OR = {
+				is_at_war_with = event_target:wreckage_country
+				event_target:wreckage_country = { is_homicidal = yes }
+			}
+		}
+		clear_global_event_target = wreckage_country
+	}
+}
+
+# Stellar Millstones: Owner Space Message ( Wreckage exists )
+country_event = {
+	id = solarstorm_fleet_event.25
+	title = "solarstorm_fleet_event.25.name"
+	desc = "solarstorm_fleet_event.25.desc"
+	picture = GFX_evt_wreckage
+	show_sound = event_sensor_ping
+	location = event_target:fleet_wreckage
+	
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = { is_same_value = event_target:wreckage_country }
+	}
+	
+	immediate = {
+	}
+
+	option = {
+		name = "help_wreckage_country"
+		trigger = {
+			OR = {
+				NOT = { is_at_war_with = event_target:wreckage_country }
+				event_target:wreckage_country = { is_homicidal = no }
+			}
+		}
+		event_target:fleet_wreckage = {
+			enable_special_project = {
+				name = "RESCUE_PROJECT"
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+	
+	option = {
+		name = "explore_fleet_wreckage"
+		event_target:fleet_wreckage = {
+			enable_special_project = {
+				name = "EXPLORE_WRECKAGE_PROJECT"
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+	
+	option = {
+		name = IS_A_DANGEROUS_PLACE
+		trigger = {
+			OR = {
+				NOT = { is_at_war_with = event_target:wreckage_country }
+				event_target:wreckage_country = { is_homicidal = no }
+			}
+		}
+		hidden_effect = { 
+			event_target:fleet_wreckage = {
+				destroy_ambient_object = this
+			}
+			clear_global_event_target = fleet_wreckage
+		}
+	}
+	
+	option = {
+		name = EXCELLENT
+		trigger = {
+			OR = {
+				is_at_war_with = event_target:wreckage_country
+				event_target:wreckage_country = { is_homicidal = yes }
+			}
+		}
+		hidden_effect = { 
+			event_target:fleet_wreckage = {
+				destroy_ambient_object = this
+			}
+			clear_global_event_target = fleet_wreckage
+		}
+	}
+}
+
+# Stellar Millstones: Owner Space Message ( Unknown wreckage )
+country_event = {
+	id = solarstorm_fleet_event.26
+	title = "solarstorm_fleet_event.26.name"
+	desc = "solarstorm_fleet_event.26.desc"
+	picture = GFX_evt_wreckage
+	show_sound = event_sensor_ping
+	location = event_target:fleet_wreckage
+	
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = { is_same_value = event_target:wreckage_country }
+	}
+	
+	immediate = {
+	}
+	
+	option = {
+		name = "explore_fleet_wreckage"
+		event_target:fleet_wreckage = {
+			enable_special_project = {
+				name = "EXPLORE_WRECKAGE_PROJECT"
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+	
+	option = {
+		name = IS_A_DANGEROUS_PLACE
+		trigger = {
+			OR = {
+				NOT = { is_at_war_with = event_target:wreckage_country }
+				event_target:wreckage_country = { is_homicidal = no }
+			}
+		}
+		hidden_effect = { 
+			event_target:fleet_wreckage = {
+				destroy_ambient_object = this
+			} 
+			clear_global_event_target = fleet_wreckage
+		}
+	}
+	
+	option = {
+		name = EXCELLENT
+		trigger = {
+			OR = {
+				is_at_war_with = event_target:wreckage_country
+				event_target:wreckage_country = { is_homicidal = yes }
+			}
+		}
+		hidden_effect = { 
+			event_target:fleet_wreckage = {
+				destroy_ambient_object = this
+			}
+			clear_global_event_target = fleet_wreckage
+		}
+	}
+}
+
+
+# Stellar Millstones: Several ships destroyed (admiral died)
+country_event = {
+	id = solarstorm_fleet_event.27
+	title = "solarstorm_fleet_event.27.name"
+	desc = "solarstorm_fleet_event.27.desc"
+	picture = GFX_evt_stellar_millstones
+	show_sound = event_air_raid_siren
+	location = event_target:fleet_threatened
+	
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = { has_country_flag = met_stellar_millstones }
+	}
+	
+	immediate = {
+		set_country_flag = met_stellar_millstones
+	}
+
+	option = {
+		name = IS_A_DANGEROUS_PLACE
+		
+		custom_tooltip = damaged_and_destroyed_ships_report
+	}
+}
+
+# Stellar Millstones: Many ships destroyed (admiral died)
+country_event = {
+	id = solarstorm_fleet_event.28
+	title = "solarstorm_fleet_event.28.name"
+	desc = "solarstorm_fleet_event.28.desc"
+	picture = GFX_evt_stellar_millstones
+	show_sound = event_air_raid_siren
+	location = event_target:fleet_threatened
+	
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = { has_country_flag = met_stellar_millstones }
+	}
+	
+	immediate = {
+		set_country_flag = met_stellar_millstones
+		event_target:dangerous_system = {
+			if = {
+				limit = {
+					AND = {
+						exists = space_owner
+						NOT = { space_owner = {	is_same_value = prev } }
+					}
+				}
+				space_owner = {
+					if = {
+						limit = {
+							AND = {
+								is_country_type = default
+								is_homicidal = no
+								has_communications = prevprev
+							}
+						}
+						country_event = { id = solarstorm_fleet_event.24 days = 1 }
+					}
+					if = {
+						limit = {
+							AND = {
+								is_country_type = default
+								is_homicidal = no
+								NOT = { has_communications = prevprev }
+							}
+						}
+						country_event = { id = solarstorm_fleet_event.25 days = 1 }
+						
+						create_ambient_object = {
+							type = "small_debris_object"
+							location = event_target:fleet_threatened
+						}
+						last_created_ambient_object = {
+							save_global_event_target_as = fleet_wreckage
+						}
+					}
+					
+					prevprev = { save_global_event_target_as = wreckage_country }
+				}
+			}
+		}
+	}
+
+	option = {
+		name = IS_A_DANGEROUS_PLACE
+		
+		custom_tooltip = damaged_and_destroyed_ships_report
+	}
+}
+
+# Stellar Millstones: All ships destroyed (admiral died)
+country_event = {
+	id = solarstorm_fleet_event.29
+	title = "solarstorm_fleet_event.29.name"
+	desc = "solarstorm_fleet_event.28.desc"
+	picture = GFX_evt_stellar_millstones
+	show_sound = event_air_raid_siren
+	location = event_target:fleet_threatened
+	
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = { has_country_flag = met_stellar_millstones }
+	}
+	
+	immediate = {
+		set_country_flag = met_stellar_millstones
+		event_target:dangerous_system = {
+			if = {
+				limit = {
+					AND = {
+						exists = space_owner
+						NOT = { space_owner = {	is_same_value = prev } }
+					}
+				}
+				space_owner = {
+					if = {
+						limit = {
+							AND = {
+								is_country_type = default
+								is_homicidal = no
+								has_communications = prevprev
+							}
+						}
+						country_event = { id = solarstorm_fleet_event.25 days = 1 }
+						
+						create_ambient_object = {
+							type = "small_debris_object"
+							location = event_target:fleet_threatened
+						}
+						last_created_ambient_object = {
+							save_global_event_target_as = fleet_wreckage
+						}
+					}
+					if = {
+						limit = {
+							AND = {
+								is_country_type = default
+								is_homicidal = no
+								NOT = { has_communications = prevprev }
+							}
+						}
+						country_event = { id = solarstorm_fleet_event.26 days = 1 }
+						
+						create_ambient_object = {
+							type = "small_debris_object"
+							location = event_target:fleet_threatened
+						}
+						last_created_ambient_object = {
+							save_global_event_target_as = fleet_wreckage
+						}
+					}
+					
+					prevprev = { save_global_event_target_as = wreckage_country }
+				}
+			}
+		}
+	}
+
+	option = {
+		name = TERRIBLE
+		
+		custom_tooltip = fleet_lost
+	}
+}
+
+
+# Solar Storm: Science ship survived
+country_event = {
+	id = solarstorm_fleet_event.30
+	title = "solarstorm_fleet_event.30.name"
+	desc = "solarstorm_fleet_event.30.desc"
+	picture = GFX_evt_solar_storm
+	show_sound = event_sensor_ping
+	location = event_target:ship_threatened
+	
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = { has_country_flag = met_solar_storm }
+	}
+	
+	immediate = {
+		set_country_flag = met_solar_storm
+	}
+
+	option = {
+		name = IS_A_DANGEROUS_PLACE
+		
+		event_target:ship_threatened = {
+			if = {
+				limit = { exists = leader }
+				locked_random_list = {
+					30 = {
+						modifier = {
+							factor = 0
+							leader = { has_trait = leader_trait_roamer }
+						}
+						leader = { add_trait = leader_trait_roamer }
+					}
+					70 = {
+						#Null
+					}
+				}
+				leader = { add_experience = 200 }
+			}
+		}
+	}
+}
+
+# Solar Storm: Science ship destroyed (Scientist survived)
+country_event = {
+	id = solarstorm_fleet_event.31
+	title = "solarstorm_fleet_event.31.name"
+	desc = "solarstorm_fleet_event.31.desc"
+	picture = GFX_evt_solar_storm
+	show_sound = event_air_raid_siren
+	location = event_target:ship_threatened
+	
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = { has_country_flag = met_solar_storm }
+	}
+	
+	immediate = {
+		set_country_flag = met_solar_storm
+	}
+
+	option = {
+		name = IS_A_DANGEROUS_PLACE
+		
+		event_target:ship_threatened = { 
+			if = {
+				limit = { exists = leader }
+				locked_random_list = {
+					30 = {
+						modifier = {
+							factor = 0
+							leader = { has_trait = leader_trait_roamer }
+						}
+						leader = { add_trait = leader_trait_roamer }
+					}
+					70 = {
+						#Null
+					}
+				}
+				leader = { add_experience = 200 }
+			}
+			
+			destroy_ship = this
+		}
+	}
+}
+
+# Solar Storm: Сonstructor ship survived
+country_event = {
+	id = solarstorm_fleet_event.32
+	title = "solarstorm_fleet_event.32.name"
+	desc = "solarstorm_fleet_event.32.desc"
+	picture = GFX_evt_solar_storm
+	show_sound = event_sensor_ping
+	location = event_target:ship_threatened
+	
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = { has_country_flag = met_solar_storm }
+	}
+	
+	immediate = {
+		set_country_flag = met_solar_storm
+	}
+
+	option = {
+		name = IS_A_DANGEROUS_PLACE
+	}
+}
+
+# Solar Storm: Сonstructor ship destroyed
+country_event = {
+	id = solarstorm_fleet_event.33
+	title = "solarstorm_fleet_event.33.name"
+	desc = "solarstorm_fleet_event.33.desc"
+	picture = GFX_evt_solar_storm
+	show_sound = event_air_raid_siren
+	location = event_target:ship_threatened
+	
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = { has_country_flag = met_solar_storm }
+	}
+	
+	immediate = {
+		set_country_flag = met_solar_storm
+	}
+
+	option = {
+		name = IS_A_DANGEROUS_PLACE
+		
+		event_target:ship_threatened = { 
+			destroy_ship = this
+		}
+	}
+}
+
+# Solar Storm: Colonizer ship survived
+country_event = {
+	id = solarstorm_fleet_event.34
+	title = "solarstorm_fleet_event.34.name"
+	desc = "solarstorm_fleet_event.34.desc"
+	picture = GFX_evt_solar_storm
+	show_sound = event_sensor_ping
+	location = event_target:ship_threatened
+	
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = { has_country_flag = met_solar_storm }
+	}
+	
+	immediate = {
+		set_country_flag = met_solar_storm
+	}
+
+	option = {
+		name = IS_A_DANGEROUS_PLACE
+	}
+}
+
+# Solar Storm: Colonizer ship destroyed
+country_event = {
+	id = solarstorm_fleet_event.35
+	title = "solarstorm_fleet_event.35.name"
+	desc = "solarstorm_fleet_event.35.desc"
+	picture = GFX_evt_solar_storm
+	show_sound = event_air_raid_siren
+	location = event_target:ship_threatened
+	
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = { has_country_flag = met_solar_storm }
+	}
+	
+	immediate = {
+		set_country_flag = met_solar_storm
+	}
+
+	option = {
+		name = IS_A_DANGEROUS_PLACE
+		
+		event_target:ship_threatened = { 
+			destroy_ship = this
+		}
+	}
+}
+
+# Solar Storm: Science ship damaged
+country_event = {
+	id = solarstorm_fleet_event.36
+	title = "solarstorm_fleet_event.36.name"
+	desc = "solarstorm_fleet_event.36.desc"
+	picture = GFX_evt_solar_storm
+	show_sound = event_sensor_ping
+	location = event_target:ship_threatened
+	
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = { has_country_flag = met_solar_storm }
+	}
+	
+	immediate = {
+		set_country_flag = met_solar_storm
+	}
+
+	option = {
+		name = IS_A_DANGEROUS_PLACE
+		
+		event_target:ship_threatened = {
+			if = {
+				limit = { exists = leader }
+				locked_random_list = {
+					30 = {
+						modifier = {
+							factor = 0
+							leader = { has_trait = leader_trait_roamer }
+						}
+						leader = { add_trait = leader_trait_roamer }
+					}
+					70 = {
+						#Null
+					}
+				}
+				leader = { add_experience = 200 }
+			}
+			reduce_hp_percent = 50
+		}
+	}
+}
+
+# Solar Storm: Science ship destroyed (Scientist died)
+country_event = {
+	id = solarstorm_fleet_event.37
+	title = "solarstorm_fleet_event.37.name"
+	desc = "solarstorm_fleet_event.37.desc"
+	picture = GFX_evt_solar_storm
+	show_sound = event_air_raid_siren
+	location = event_target:ship_threatened
+	
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = { has_country_flag = met_solar_storm }
+	}
+	
+	immediate = {
+		set_country_flag = met_solar_storm
+	}
+
+	option = {
+		name = IS_A_DANGEROUS_PLACE
+		
+		event_target:ship_threatened = { 
+			destroy_ship = this
+		}
+	}
+}
+
+# Solar Storm: Сonstructor ship damaged
+country_event = {
+	id = solarstorm_fleet_event.38
+	title = "solarstorm_fleet_event.38.name"
+	desc = "solarstorm_fleet_event.38.desc"
+	picture = GFX_evt_solar_storm
+	show_sound = event_sensor_ping
+	location = event_target:ship_threatened
+	
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = { has_country_flag = met_solar_storm }
+	}
+	
+	immediate = {
+		set_country_flag = met_solar_storm
+	}
+
+	option = {
+		name = IS_A_DANGEROUS_PLACE
+		
+		event_target:ship_threatened = {
+			reduce_hp_percent = 50
+		}
+	}
+}
+
+# Solar Storm: Colonizer ship damaged
+country_event = {
+	id = solarstorm_fleet_event.39
+	title = "solarstorm_fleet_event.39.name"
+	desc = "solarstorm_fleet_event.39.desc"
+	picture = GFX_evt_solar_storm
+	show_sound = event_sensor_ping
+	location = event_target:ship_threatened
+	
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = { has_country_flag = met_solar_storm }
+	}
+	
+	immediate = {
+		set_country_flag = met_solar_storm
+	}
+
+	option = {
+		name = IS_A_DANGEROUS_PLACE
+		
+		event_target:ship_threatened = {
+			reduce_hp_percent = 50
+		}
+	}
+}
+
+
+# Solar Storm: All ships survived
+country_event = {
+	id = solarstorm_fleet_event.40
+	title = "solarstorm_fleet_event.40.name"
+	desc = "solarstorm_fleet_event.40.desc"
+	picture = GFX_evt_solar_storm
+	show_sound = event_sensor_ping
+	location = event_target:fleet_threatened
+	
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = { has_country_flag = met_solar_storm }
+	}
+	
+	immediate = {
+		set_country_flag = met_solar_storm
+	}
+
+	option = {
+		name = GOOD
+		
+		event_target:fleet_threatened = {
+			if = {
+				limit = { exists = leader }
+				locked_random_list = {
+					30 = {
+						modifier = {
+							factor = 0
+							leader = { has_trait = leader_trait_scout }
+						}
+						leader = { add_trait = leader_trait_scout }
+					}
+					70 = {
+						#Null
+					}
+				}
+				leader = { add_experience = 200 }
+			}
+		}
+		
+		custom_tooltip = damaged_ships_report
+	}
+}
+
+# Solar Storm: Several ships destroyed (no leader or admiral survived)
+country_event = {
+	id = solarstorm_fleet_event.41
+	title = "solarstorm_fleet_event.41.name"
+	desc = {
+		trigger = { 
+			event_target:fleet_threatened = {
+				exists = leader
+				leader = { leader_class = admiral }
+				NOT = { has_fleet_flag = admiral_died }	
+			}
+		}
+		text = "solarstorm_fleet_event.41.desc.admiral_survived"
+	}
+	desc = {
+		trigger = { 
+			event_target:fleet_threatened = {
+				NOR = {
+					exists = leader
+					leader = { leader_class = admiral }
+				}
+			}
+		}
+		text = "solarstorm_fleet_event.41.desc"
+	}
+	picture = GFX_evt_solar_storm
+	show_sound = event_air_raid_siren
+	location = event_target:fleet_threatened
+	
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = { has_country_flag = met_solar_storm }
+	}
+	
+	immediate = {
+		set_country_flag = met_solar_storm 
+	}
+
+	option = {
+		name = IS_A_DANGEROUS_PLACE
+		
+		event_target:fleet_threatened = {
+			if = {
+				limit = { exists = leader }
+				locked_random_list = {
+					30 = {
+						modifier = {
+							factor = 0
+							leader = { has_trait = leader_trait_scout }
+						}
+						leader = { add_trait = leader_trait_scout }
+					}
+					70 = {
+						#Null
+					}
+				}
+				leader = { add_experience = 200 }
+			}
+		}
+		
+		custom_tooltip = damaged_and_destroyed_ships_report
+	}
+}
+
+# Solar Storm: Many ships destroyed (no leader or admiral survived)
+country_event = {
+	id = solarstorm_fleet_event.42
+	title = "solarstorm_fleet_event.42.name"
+	desc = {
+		trigger = { 
+			event_target:fleet_threatened = {
+				exists = leader
+				leader = { leader_class = admiral }
+			}
+		}
+		text = "solarstorm_fleet_event.42.desc.admiral_survived"
+	}
+	desc = {
+		trigger = { 
+			event_target:fleet_threatened = {
+				NOR = {
+					exists = leader
+					leader = { leader_class = admiral }
+				}
+			}
+		}
+		text = "solarstorm_fleet_event.42.desc"
+	}
+	picture = GFX_evt_solar_storm
+	show_sound = event_air_raid_siren
+	location = event_target:fleet_threatened
+	
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = { has_country_flag = met_solar_storm }
+	}
+	
+	immediate = {
+		set_country_flag = met_solar_storm
+		event_target:dangerous_system = {
+			if = {
+				limit = {
+					AND = {
+						exists = space_owner
+						NOT = { space_owner = {	is_same_value = prev } }
+					}
+				}
+				space_owner = {
+					if = {
+						limit = {
+							AND = {
+								is_country_type = default
+								is_homicidal = no
+								has_communications = prevprev
+							}
+						}
+						country_event = { id = solarstorm_fleet_event.44 days = 1 }
+					}
+					if = {
+						limit = {
+							AND = {
+								is_country_type = default
+								is_homicidal = no
+								NOT = { has_communications = prevprev }
+							}
+						}
+						country_event = { id = solarstorm_fleet_event.45 days = 1 }
+						
+						create_ambient_object = {
+							type = "small_debris_object"
+							location = event_target:fleet_threatened
+						}
+						last_created_ambient_object = {
+							save_global_event_target_as = fleet_wreckage
+						}
+					}
+					
+					prevprev = { save_global_event_target_as = wreckage_country }
+				}
+			}
+		}
+	}
+
+	option = {
+		name = IS_A_DANGEROUS_PLACE
+		
+		custom_tooltip = damaged_and_destroyed_ships_report
+	}
+}
+
+# Solar Storm: All ships destroyed (no leader or admiral survived)
+country_event = {
+	id = solarstorm_fleet_event.43
+	title = "solarstorm_fleet_event.43.name"
+	desc = {
+		trigger = { 
+			event_target:fleet_threatened = {
+				exists = leader
+				leader = { leader_class = admiral }
+			}
+		}
+		text = "solarstorm_fleet_event.43.desc.admiral_survived"
+	}
+	desc = {
+		trigger = { 
+			event_target:fleet_threatened = {
+				NOR = {
+					exists = leader
+					leader = { leader_class = admiral }
+				}
+			}
+		}
+		text = "solarstorm_fleet_event.43.desc"
+	}
+	picture = GFX_evt_solar_storm
+	show_sound = event_air_raid_siren
+	location = event_target:fleet_threatened
+	
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = { has_country_flag = met_solar_storm }
+	}
+	
+	immediate = {
+		set_country_flag = met_solar_storm
+		event_target:dangerous_system = {
+			if = {
+				limit = {
+					AND = {
+						exists = space_owner
+						NOT = { space_owner = {	is_same_value = prev } }
+					}
+				}
+				space_owner = {
+					if = {
+						limit = {
+							AND = {
+								is_country_type = default
+								is_homicidal = no
+								has_communications = prevprev
+							}
+						}
+						country_event = { id = solarstorm_fleet_event.45 days = 1 }
+						
+						create_ambient_object = {
+							type = "small_debris_object"
+							location = event_target:fleet_threatened
+						}
+						last_created_ambient_object = {
+							save_global_event_target_as = fleet_wreckage
+						}
+					}
+					if = {
+						limit = {
+							AND = {
+								is_country_type = default
+								is_homicidal = no
+								NOT = { has_communications = prevprev }
+							}
+						}
+						country_event = { id = solarstorm_fleet_event.46 days = 1 }
+						
+						create_ambient_object = {
+							type = "small_debris_object"
+							location = event_target:fleet_threatened
+						}
+						last_created_ambient_object = {
+							save_global_event_target_as = fleet_wreckage
+						}
+					}
+					
+					prevprev = { save_global_event_target_as = wreckage_country }
+				}
+			}
+		}
+	}
+
+	option = {
+		name = TERRIBLE	
+		custom_tooltip = fleet_lost
+	}
+}
+
+# Solar Storm: Owner Space Message ( No wreckage )
+country_event = {
+	id = solarstorm_fleet_event.44
+	title = "solarstorm_fleet_event.44.name"
+	desc = "solarstorm_fleet_event.44.desc"
+	picture = GFX_evt_solar_storm
+	show_sound = event_sensor_ping
+	location = from
+	
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = { is_same_value = event_target:wreckage_country }
+	}
+	
+	immediate = {
+	}
+
+	option = {
+		name = IS_A_DANGEROUS_PLACE
+		trigger = {
+			OR = {
+				NOT = { is_at_war_with = event_target:wreckage_country }
+				event_target:wreckage_country = { is_homicidal = no }
+			}
+		}
+		clear_global_event_target = wreckage_country
+	}
+	
+	option = {
+		name = EXCELLENT
+		trigger = {
+			OR = {
+				is_at_war_with = event_target:wreckage_country
+				event_target:wreckage_country = { is_homicidal = yes }
+			}
+		}
+		clear_global_event_target = wreckage_country
+	}
+}
+
+# Solar Storm: Owner Space Message ( Wreckage exists )
+country_event = {
+	id = solarstorm_fleet_event.45
+	title = "solarstorm_fleet_event.45.name"
+	desc = "solarstorm_fleet_event.45.desc"
+	picture = GFX_evt_wreckage
+	show_sound = event_sensor_ping
+	location = event_target:fleet_wreckage
+	
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = { is_same_value = event_target:wreckage_country }
+	}
+	
+	immediate = {
+	}
+
+	option = {
+		name = "help_wreckage_country"
+		trigger = {
+			OR = {
+				NOT = { is_at_war_with = event_target:wreckage_country }
+				event_target:wreckage_country = { is_homicidal = no }
+			}
+		}
+		event_target:fleet_wreckage = {
+			enable_special_project = {
+				name = "RESCUE_PROJECT"
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+	
+	option = {
+		name = "explore_fleet_wreckage"
+		event_target:fleet_wreckage = {
+			enable_special_project = {
+				name = "EXPLORE_WRECKAGE_PROJECT"
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+	
+	option = {
+		name = IS_A_DANGEROUS_PLACE
+		trigger = {
+			OR = {
+				NOT = { is_at_war_with = event_target:wreckage_country }
+				event_target:wreckage_country = { is_homicidal = no }
+			}
+		}
+		hidden_effect = { 
+			event_target:fleet_wreckage = {
+				destroy_ambient_object = this
+			}
+			clear_global_event_target = fleet_wreckage
+		}
+	}
+	
+	option = {
+		name = EXCELLENT
+		trigger = {
+			OR = {
+				is_at_war_with = event_target:wreckage_country
+				event_target:wreckage_country = { is_homicidal = yes }
+			}
+		}
+		hidden_effect = { 
+			event_target:fleet_wreckage = {
+				destroy_ambient_object = this
+			}
+			clear_global_event_target = fleet_wreckage
+		}
+	}
+}
+
+# Solar Storm: Owner Space Message ( Unknown wreckage )
+country_event = {
+	id = solarstorm_fleet_event.46
+	title = "solarstorm_fleet_event.46.name"
+	desc = "solarstorm_fleet_event.46.desc"
+	picture = GFX_evt_wreckage
+	show_sound = event_sensor_ping
+	location = event_target:fleet_wreckage
+	
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = { is_same_value = event_target:wreckage_country }
+	}
+	
+	immediate = {
+	}
+	
+	option = {
+		name = "explore_fleet_wreckage"
+		event_target:fleet_wreckage = {
+			enable_special_project = {
+				name = "EXPLORE_WRECKAGE_PROJECT"
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+	
+	option = {
+		name = IS_A_DANGEROUS_PLACE
+		trigger = {
+			OR = {
+				NOT = { is_at_war_with = event_target:wreckage_country }
+				event_target:wreckage_country = { is_homicidal = no }
+			}
+		}
+		hidden_effect = { 
+			event_target:fleet_wreckage = {
+				destroy_ambient_object = this
+			}
+			clear_global_event_target = fleet_wreckage
+		}
+	}
+	
+	option = {
+		name = EXCELLENT
+		trigger = {
+			OR = {
+				is_at_war_with = event_target:wreckage_country
+				event_target:wreckage_country = { is_homicidal = yes }
+			}
+		}
+		hidden_effect = { 
+			event_target:fleet_wreckage = {
+				destroy_ambient_object = this
+			}
+			clear_global_event_target = fleet_wreckage
+		}
+	}
+}
+
+# Solar Storm: Several ships destroyed (admiral died)
+country_event = {
+	id = solarstorm_fleet_event.47
+	title = "solarstorm_fleet_event.47.name"
+	desc = "solarstorm_fleet_event.47.desc"
+	picture = GFX_evt_solar_storm
+	show_sound = event_air_raid_siren
+	location = event_target:fleet_threatened
+	
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = { has_country_flag = met_stellar_millstones }
+	}
+	
+	immediate = {
+		set_country_flag = met_stellar_millstones
+	}
+
+	option = {
+		name = IS_A_DANGEROUS_PLACE
+		
+		custom_tooltip = damaged_and_destroyed_ships_report
+	}
+}
+
+# Solar Storm: Many ships destroyed (admiral died)
+country_event = {
+	id = solarstorm_fleet_event.48
+	title = "solarstorm_fleet_event.48.name"
+	desc = "solarstorm_fleet_event.48.desc"
+	picture = GFX_evt_solar_storm
+	show_sound = event_air_raid_siren
+	location = event_target:fleet_threatened
+	
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = { has_country_flag = met_stellar_millstones }
+	}
+	
+	immediate = {
+		set_country_flag = met_stellar_millstones
+		event_target:dangerous_system = {
+			if = {
+				limit = {
+					AND = {
+						exists = space_owner
+						NOT = { space_owner = {	is_same_value = prev } }
+					}
+				}
+				space_owner = {
+					if = {
+						limit = {
+							AND = {
+								is_country_type = default
+								is_homicidal = no
+								has_communications = prevprev
+							}
+						}
+						country_event = { id = solarstorm_fleet_event.24 days = 1 }
+					}
+					if = {
+						limit = {
+							AND = {
+								is_country_type = default
+								is_homicidal = no
+								NOT = { has_communications = prevprev }
+							}
+						}
+						country_event = { id = solarstorm_fleet_event.25 days = 1 }
+						
+						create_ambient_object = {
+							type = "small_debris_object"
+							location = event_target:fleet_threatened
+						}
+						last_created_ambient_object = {
+							save_global_event_target_as = fleet_wreckage
+						}
+					}
+					
+					prevprev = { save_global_event_target_as = wreckage_country }
+				}
+			}
+		}
+	}
+
+	option = {
+		name = IS_A_DANGEROUS_PLACE
+		
+		custom_tooltip = damaged_and_destroyed_ships_report
+	}
+}
+
+# Solar Storm: All ships destroyed (admiral died)
+country_event = {
+	id = solarstorm_fleet_event.49
+	title = "solarstorm_fleet_event.49.name"
+	desc = "solarstorm_fleet_event.48.desc"
+	picture = GFX_evt_solar_storm
+	show_sound = event_air_raid_siren
+	location = event_target:fleet_threatened
+	
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = { has_country_flag = met_stellar_millstones }
+	}
+	
+	immediate = {
+		set_country_flag = met_stellar_millstones
+		event_target:dangerous_system = {
+			if = {
+				limit = {
+					AND = {
+						exists = space_owner
+						NOT = { space_owner = {	is_same_value = prev } }
+					}
+				}
+				space_owner = {
+					if = {
+						limit = {
+							AND = {
+								is_country_type = default
+								is_homicidal = no
+								has_communications = prevprev
+							}
+						}
+						country_event = { id = solarstorm_fleet_event.25 days = 1 }
+						
+						create_ambient_object = {
+							type = "small_debris_object"
+							location = event_target:fleet_threatened
+						}
+						last_created_ambient_object = {
+							save_global_event_target_as = fleet_wreckage
+						}
+					}
+					if = {
+						limit = {
+							AND = {
+								is_country_type = default
+								is_homicidal = no
+								NOT = { has_communications = prevprev }
+							}
+						}
+						country_event = { id = solarstorm_fleet_event.26 days = 1 }
+						
+						create_ambient_object = {
+							type = "small_debris_object"
+							location = event_target:fleet_threatened
+						}
+						last_created_ambient_object = {
+							save_global_event_target_as = fleet_wreckage
+						}
+					}
+					
+					prevprev = { save_global_event_target_as = wreckage_country }
+				}
+			}
+		}
+	}
+
+	option = {
+		name = TERRIBLE
+		
+		custom_tooltip = fleet_lost
+	}
+}
+
+
+# Gamma-ray Burst occurred
+planet_event = {
+	id = solarstorm_fleet_event.50
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+	}
+	
+	immediate = {
+		solar_system = {
+			every_fleet_in_system = { 
+				limit = { NOT = { is_ship_class = shipclass_military_station } }
+				save_event_target_as = destroyed_fleet
+				owner = { country_event = { id = solarstorm_fleet_event.51 days = 1 } }
+			}
+		}
+	}
+}
+
+# Gamma-ray Burst: All ships destroyed
+country_event = {
+	id = solarstorm_fleet_event.51
+	title = "solarstorm_fleet_event.51.name"
+	desc = "solarstorm_fleet_event.51.desc"
+	picture = GFX_evt_gamma_burst
+	show_sound = event_air_raid_siren
+	location = event_target:destroyed_fleet
+	
+	is_triggered_only = yes
+
+	trigger = {
+		exists = event_target:destroyed_fleet
+		event_target:destroyed_fleet = {
+			solar_system = {
+				is_same_value = event_target:gamma_burst_system
+			}
+		}
+	}
+	
+	immediate = {
+		event_target:gamma_burst_system = {
+			if = {
+				limit = {
+					AND = {
+						exists = space_owner
+						NOT = { space_owner = {	is_same_value = prev } }
+					}
+				}
+				space_owner = {
+					if = {
+						limit = {
+							AND = {
+								is_country_type = default
+								is_homicidal = no
+								has_communications = prevprev
+							}
+						}
+						country_event = { id = solarstorm_fleet_event.52 days = 1 }
+						
+						create_ambient_object = {
+							type = "small_debris_object"
+							location = event_target:destroyed_fleet
+						}
+						last_created_ambient_object = {
+							save_event_target_as = fleet_wreckage
+						}
+					}
+					if = {
+						limit = {
+							AND = {
+								is_country_type = default
+								is_homicidal = no
+								NOT = { has_communications = prevprev }
+							}
+						}
+						country_event = { id = solarstorm_fleet_event.53 days = 1 }
+								
+						create_ambient_object = {
+							type = "small_debris_object"
+							location = event_target:destroyed_fleet
+						}
+						last_created_ambient_object = {
+							save_event_target_as = fleet_wreckage
+						}
+					}
+							
+					prevprev = { save_event_target_as = wreckage_country }
+				}
+			}
+		}
+	}
+
+	option = {
+		name = TERRIBLE
+		event_target:destroyed_fleet = { destroy_fleet = this }
+	}
+}
+
+
+# Gamma-ray Burst: Owner Space Message ( Wreckage exists )
+country_event = {
+	id = solarstorm_fleet_event.52
+	title = "solarstorm_fleet_event.52.name"
+	desc = "solarstorm_fleet_event.52.desc"
+	picture = GFX_evt_wreckage
+	show_sound = event_sensor_ping
+	location = event_target:fleet_wreckage
+	
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = { is_same_value = event_target:wreckage_country }
+	}
+	
+	immediate = {
+	}
+	
+	option = {
+		name = "explore_fleet_wreckage"
+		event_target:fleet_wreckage = {
+			enable_special_project = {
+				name = "EXPLORE_WRECKAGE_PROJECT"
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+	
+	option = {
+		name = IS_A_DANGEROUS_PLACE
+		trigger = {
+			OR = {
+				NOT = { is_at_war_with = event_target:wreckage_country }
+				event_target:wreckage_country = { is_homicidal = no }
+			}
+		}
+		hidden_effect = { 
+			event_target:fleet_wreckage = {
+				destroy_ambient_object = this
+			}
+			clear_global_event_target = fleet_wreckage
+		}
+	}
+	
+	option = {
+		name = EXCELLENT
+		trigger = {
+			OR = {
+				is_at_war_with = event_target:wreckage_country
+				event_target:wreckage_country = { is_homicidal = yes }
+			}
+		}
+		hidden_effect = { 
+			event_target:fleet_wreckage = {
+				destroy_ambient_object = this
+			}
+			clear_global_event_target = fleet_wreckage
+		}
+	}
+}
+
+# Gamma-ray Burst: Owner Space Message ( Unknown wreckage )
+country_event = {
+	id = solarstorm_fleet_event.53
+	title = "solarstorm_fleet_event.53.name"
+	desc = "solarstorm_fleet_event.53.desc"
+	picture = GFX_evt_wreckage
+	show_sound = event_sensor_ping
+	location = event_target:fleet_wreckage
+	
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = { is_same_value = event_target:wreckage_country }
+	}
+	
+	immediate = {
+	}
+	
+	option = {
+		name = "solarstorm_fleet_event.53.explore"
+		event_target:fleet_wreckage = {
+			enable_special_project = {
+				name = "EXPLORE_WRECKAGE_PROJECT"
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+	
+	option = {
+		name = IS_A_DANGEROUS_PLACE
+		trigger = {
+			OR = {
+				NOT = { is_at_war_with = event_target:wreckage_country }
+				event_target:wreckage_country = { is_homicidal = no }
+			}
+		}
+		hidden_effect = { 
+			event_target:fleet_wreckage = {
+				destroy_ambient_object = this
+			}
+			clear_global_event_target = fleet_wreckage
+		}
+	}
+	
+	option = {
+		name = EXCELLENT
+		trigger = {
+			OR = {
+				is_at_war_with = event_target:wreckage_country
+				event_target:wreckage_country = { is_homicidal = yes }
+			}
+		}
+		hidden_effect = { 
+			event_target:fleet_wreckage = {
+				destroy_ambient_object = this
+			}
+			clear_global_event_target = fleet_wreckage
+		}
+	}
+}
+
+
+# Joint rescue operation
+country_event = {
+	id = solarstorm_fleet_event.100
+	title = "solarstorm_fleet_event.100.name"
+	desc = "solarstorm_fleet_event.100.desc"
+	location = event_target:wreckage_country
+
+	diplomatic = yes
+	
+	is_triggered_only = yes
+
+	picture_event_data = {
+		portrait = event_target:wreckage_country
+		planet_background = event_target:wreckage_country
+		graphical_culture = event_target:wreckage_country
+		city_level = event_target:wreckage_country
+		room = event_target:wreckage_country.ruler
+	}
+
+	option = {
+		name = "solarstorm_fleet_event.100.a"
+		add_resource = { influence = 150 }
+		event_target:wreckage_country = {
+			add_opinion_modifier = {
+				who = root
+				modifier = opinion_rescue_operation
+			}
+		}
+		hidden_effect = {
+			event_target:fleet_wreckage = {
+				destroy_ambient_object = this
+			}
+			clear_global_event_target = fleet_wreckage
+			clear_global_event_target = wreckage_country
+		}
+	}
+}
+
+# Exploring known wreckage
+country_event = {
+	id = solarstorm_fleet_event.101
+	title = "solarstorm_fleet_event.101.name"
+	desc = "solarstorm_fleet_event.101.desc"
+	picture = GFX_evt_wreckage
+	show_sound = event_sensor_ping
+	location = event_target:fleet_wreckage
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+	
+	immediate = {
+		event_target:fleet_wreckage = {
+			destroy_ambient_object = this
+		}
+		clear_global_event_target = fleet_wreckage
+		clear_global_event_target = wreckage_country
+	}
+	
+	option = {
+		name = SPLENDID
+		locked_random_list = {
+			10 = {
+				add_random_research_option = {
+					add_progress = 0.99
+					area = engineering
+					tier = 2
+					ignore_prereqs = no
+					fail_effects = {
+						add_monthly_resource_mult = {
+							resource = engineering_research
+							value = @tier5researchreward
+							min = @tier5researchmin
+							max = @tier5researchmax
+						}
+					}
+				}
+			}
+			10 = {
+				add_random_research_option = {
+					add_progress = 0.99
+					area = physics
+					tier = 2
+					ignore_prereqs = no
+					fail_effects = {
+						add_monthly_resource_mult = {
+							resource = physics_research
+							value = @tier5researchreward
+							min = @tier5researchmin
+							max = @tier5researchmax
+						}
+					}
+				}
+			}
+			10 = {
+				add_random_research_option = {
+					add_progress = 0.99
+					area = society
+					tier = 2
+					ignore_prereqs = no
+					fail_effects = {
+						add_monthly_resource_mult = {
+							resource = society_research
+							value = @tier5researchreward
+							min = @tier5researchmin
+							max = @tier5researchmax
+						}
+					}
+				}
+			}	
+			10 = {
+				add_monthly_resource_mult = {
+					resource = society_research
+					value = @tier4researchreward
+					min = @tier4researchmin
+					max = @tier4researchmax
+				}
+			}
+		}
+	}
+}
+
+# Exploring unknown wreckage
+country_event = {
+	id = solarstorm_fleet_event.102
+	title = "solarstorm_fleet_event.102.name"
+	desc = "solarstorm_fleet_event.102.desc"
+	picture = GFX_evt_wreckage
+	show_sound = event_sensor_ping
+	location = event_target:fleet_wreckage
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+	
+	immediate = {
+		event_target:fleet_wreckage = {
+			destroy_ambient_object = this
+		}
+		clear_global_event_target = fleet_wreckage
+		
+		country_event = { id = story.5 days = 30 }
+
+		event_target:wreckage_country = {
+			#Improve communication in the future...
+			establish_communications_no_message = root
+		}
+		clear_global_event_target = fleet_wreckage
+		clear_global_event_target = wreckage_country
+	}
+	
+	option = {
+		name = SPLENDID
+		owner = {
+			locked_random_list = {
+				10 = {
+					add_random_research_option = {
+						add_progress = 0.99
+						area = engineering
+						tier = 2
+						ignore_prereqs = no
+						fail_effects = {
+							add_monthly_resource_mult = {
+								resource = engineering_research
+								value = @tier5researchreward
+								min = @tier5researchmin
+								max = @tier5researchmax
+							}
+						}
+					}
+				}
+				10 = {
+					add_random_research_option = {
+						add_progress = 0.99
+						area = physics
+						tier = 2
+						ignore_prereqs = no
+						fail_effects = {
+							add_monthly_resource_mult = {
+								resource = physics_research
+								value = @tier5researchreward
+								min = @tier5researchmin
+								max = @tier5researchmax
+							}
+						}
+					}
+				}
+				10 = {
+					add_random_research_option = {
+						add_progress = 0.99
+						area = society
+						tier = 2
+						ignore_prereqs = no
+						fail_effects = {
+							add_monthly_resource_mult = {
+								resource = society_research
+								value = @tier5researchreward
+								min = @tier5researchmin
+								max = @tier5researchmax
+							}
+						}
+					}
+				}	
+				10 = {
+					add_monthly_resource_mult = {
+						resource = society_research
+						value = @tier4researchreward
+						min = @tier4researchmin
+						max = @tier4researchmax
+					}
+				}
+			}
+		}
+	}
+}
