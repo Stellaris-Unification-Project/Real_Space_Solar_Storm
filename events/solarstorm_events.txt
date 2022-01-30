@@ -253,8 +253,10 @@ planet_event = {
 							limit = {
 								AND = {
 									exists = event_target:disconnected_rift_system_1
-									NOT = { exists = event_target:disconnected_rift_system_2 }
-									NOT = { exists = event_target:disconnected_rift_system_3 }
+									NOR = {
+										exists = event_target:disconnected_rift_system_2
+										exists = event_target:disconnected_rift_system_3
+									}
 								}
 							}
 							create_message = {
@@ -389,8 +391,10 @@ planet_event = {
 							limit = {
 								AND = {
 									exists = event_target:disconnected_rift_system_1
-									NOT = { exists = event_target:disconnected_rift_system_2 }
-									NOT = { exists = event_target:disconnected_rift_system_3 }
+									NOR = {
+										exists = event_target:disconnected_rift_system_2
+										exists = event_target:disconnected_rift_system_3
+									}
 								}
 							}
 							create_message = {
@@ -490,8 +494,10 @@ country_event = {
 		trigger = {
 			AND = {
 				exists = event_target:disconnected_rift_system_1
-				NOT = { exists = event_target:disconnected_rift_system_2 }
-				NOT = { exists = event_target:disconnected_rift_system_3 }
+				NOR = {
+					exists = event_target:disconnected_rift_system_2
+					exists = event_target:disconnected_rift_system_3
+				}
 			}
 		}
 		text = "solarstorm_event.7.desc.one"
@@ -535,8 +541,10 @@ country_event = {
 		trigger = {
 			AND = {
 				exists = event_target:disconnected_rift_system_1
-				NOT = { exists = event_target:disconnected_rift_system_2 }
-				NOT = { exists = event_target:disconnected_rift_system_3 }
+				NOR = {
+					exists = event_target:disconnected_rift_system_2
+					exists = event_target:disconnected_rift_system_3
+				}
 			}
 		}
 		text = "solarstorm_event.8.desc.one"
@@ -653,8 +661,10 @@ planet_event = {
 							limit = {
 								AND = {
 									exists = event_target:connected_brige_system_1
-									NOT = { exists = event_target:connected_brige_system_2 }
-									NOT = { exists = event_target:connected_brige_system_3 }
+									NOR = {
+										exists = event_target:connected_brige_system_2
+										exists = event_target:connected_brige_system_3
+									}
 								}
 							}
 							create_message = {
@@ -790,8 +800,10 @@ planet_event = {
 							limit = {
 								AND = {
 									exists = event_target:connected_brige_system_1
-									NOT = { exists = event_target:connected_brige_system_2 }
-									NOT = { exists = event_target:connected_brige_system_3 }
+									NOR = {
+										exists = event_target:connected_brige_system_2
+										exists = event_target:connected_brige_system_3
+									}
 								}
 							}
 							create_message = {
@@ -876,8 +888,10 @@ country_event = {
 		trigger = {
 			AND = {
 				exists = event_target:connected_brige_system_1
-				NOT = { exists = event_target:connected_brige_system_2 }
-				NOT = { exists = event_target:connected_brige_system_3 }
+				NOR = {
+					exists = event_target:connected_brige_system_2
+					exists = event_target:connected_brige_system_3
+				}
 			}
 		}
 		text = "solarstorm_event.10.desc.one"
@@ -921,8 +935,10 @@ country_event = {
 		trigger = {
 			AND = {
 				exists = event_target:connected_brige_system_1
-				NOT = { exists = event_target:connected_brige_system_2 }
-				NOT = { exists = event_target:connected_brige_system_3 }
+				NOR = {
+					exists = event_target:connected_brige_system_2
+					exists = event_target:connected_brige_system_3
+				}
 			}
 		}
 		text = "solarstorm_event.11.desc.one"
@@ -1112,8 +1128,7 @@ country_event = {
 			limit = { NOT = { has_special_project = HYPERLANE_STORM_PROJECT_1 } }
 			save_event_target_as = project_country
 			event_target:shift_storm_system = {
-				random_system_planet = {
-					limit = { is_star = yes }
+				star = {
 					enable_special_project = {
 						name = "HYPERLANE_STORM_PROJECT_1"
 						location = this
@@ -1162,8 +1177,7 @@ country_event = {
 			limit = { NOT = { has_special_project = HYPERLANE_STORM_PROJECT_2 } }
 			save_event_target_as = project_country
 			event_target:rift_storm_system = {
-				random_system_planet = {
-					limit = { is_star = yes }
+				star = {
 					enable_special_project = {
 						name = "HYPERLANE_STORM_PROJECT_2"
 						location = this
@@ -1183,8 +1197,10 @@ country_event = {
 		trigger = {
 			AND = {
 				exists = event_target:disconnected_rift_system_1
-				NOT = { exists = event_target:disconnected_rift_system_2 }
-				NOT = { exists = event_target:disconnected_rift_system_3 }
+				NOR = {
+					exists = event_target:disconnected_rift_system_2
+					exists = event_target:disconnected_rift_system_3
+				}
 			}
 		}
 		text = "solarstorm_event.18.desc.one"
@@ -1241,8 +1257,7 @@ country_event = {
 			limit = { NOT = { has_special_project = HYPERLANE_STORM_PROJECT_3 } }
 			save_event_target_as = project_country
 			event_target:brige_storm_system = {
-				random_system_planet = {
-					limit = { is_star = yes }
+				star = {
 					enable_special_project = {
 						name = "HYPERLANE_STORM_PROJECT_3"
 						location = this
@@ -1262,8 +1277,10 @@ country_event = {
 		trigger = {
 			AND = {
 				exists = event_target:connected_brige_system_1
-				NOT = { exists = event_target:connected_brige_system_2 }
-				NOT = { exists = event_target:connected_brige_system_3 }
+				NOR = {
+					exists = event_target:connected_brige_system_2
+					exists = event_target:connected_brige_system_3
+				}
 			}
 		}
 		text = "solarstorm_event.11.desc.one"

@@ -61,7 +61,7 @@ fleet_event = {
 						factor = 0.2
 						from = { 
 							exists = space_owner
-							space_owner = { is_same_value = prev.owner }
+							is_owned_by = prev.owner
 							exists = starbase
 							starbase = { has_starbase_building = beacon_service_station }
 						}
@@ -144,7 +144,7 @@ fleet_event = {
 						factor = 0.2
 						from = { 
 							exists = space_owner
-							space_owner = { is_same_value = prev.owner }
+							is_owned_by = prev.owner
 							exists = starbase
 							starbase = { has_starbase_building = solar_disturbance_recorder }
 						}
@@ -869,7 +869,7 @@ fleet_event = {
 						limit = {
 							AND = {
 								exists = space_owner
-								NOT = { space_owner = {	is_same_value = prev } }
+								NOT = { is_owned_by = prev }
 							}
 						}
 						space_owner = {
@@ -1706,7 +1706,7 @@ fleet_event = {
 						limit = {
 							AND = {
 								exists = space_owner
-								NOT = { space_owner = {	is_same_value = prev } }
+								NOT = { is_owned_by = prev }
 							}
 						}
 						space_owner = {
@@ -2412,7 +2412,7 @@ country_event = {
 				limit = {
 					AND = {
 						exists = space_owner
-						NOT = { space_owner = {	is_same_value = prev } }
+						NOT = { is_owned_by = prev }
 					}
 				}
 				space_owner = {
@@ -2499,7 +2499,7 @@ country_event = {
 				limit = {
 					AND = {
 						exists = space_owner
-						NOT = { space_owner = {	is_same_value = prev } }
+						NOT = { is_owned_by = prev }
 					}
 				}
 				space_owner = {
@@ -2784,7 +2784,7 @@ country_event = {
 				limit = {
 					AND = {
 						exists = space_owner
-						NOT = { space_owner = {	is_same_value = prev } }
+						NOT = { is_owned_by = prev }
 					}
 				}
 				space_owner = {
@@ -2852,7 +2852,7 @@ country_event = {
 				limit = {
 					AND = {
 						exists = space_owner
-						NOT = { space_owner = {	is_same_value = prev } }
+						NOT = { is_owned_by = prev }
 					}
 				}
 				space_owner = {
@@ -3379,7 +3379,7 @@ country_event = {
 				limit = {
 					AND = {
 						exists = space_owner
-						NOT = { space_owner = {	is_same_value = prev } }
+						NOT = { is_owned_by = prev }
 					}
 				}
 				space_owner = {
@@ -3466,7 +3466,7 @@ country_event = {
 				limit = {
 					AND = {
 						exists = space_owner
-						NOT = { space_owner = {	is_same_value = prev } }
+						NOT = { is_owned_by = prev }
 					}
 				}
 				space_owner = {
@@ -3749,7 +3749,7 @@ country_event = {
 				limit = {
 					AND = {
 						exists = space_owner
-						NOT = { space_owner = {	is_same_value = prev } }
+						NOT = { is_owned_by = prev }
 					}
 				}
 				space_owner = {
@@ -3817,7 +3817,7 @@ country_event = {
 				limit = {
 					AND = {
 						exists = space_owner
-						NOT = { space_owner = {	is_same_value = prev } }
+						NOT = { is_owned_by = prev }
 					}
 				}
 				space_owner = {
@@ -3918,7 +3918,7 @@ country_event = {
 				limit = {
 					AND = {
 						exists = space_owner
-						NOT = { space_owner = {	is_same_value = prev } }
+						NOT = { is_owned_by = prev }
 					}
 				}
 				space_owner = {
